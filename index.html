@@ -162,6 +162,15 @@ footer li::before{content:"·";position:absolute;left:0;color:var(--blue)}
     <div class="tbl-wrap"><table class="tbl" id="dTbl"></table></div>
   </section>
 
+  <section class="card" id="dquarter">
+    <h2>直营 季度柱状 · 环比 / 同比同屏 <span class="tag">Q1=3-5月 Q2=6-8月</span></h2>
+    <div class="desc">柱体=当季出库 vs 上年同期；Q1 含3-4月新开业务、上年同期仅有5月，同比不做；Q2 同比可比。环比为 Q1→Q2。</div>
+    <div class="legend" id="dqLegend"></div>
+    <div class="chart-scroll"><div id="dqChart"></div></div>
+    <div class="qline" id="dqNote"></div>
+    <div class="tbl-wrap"><table class="tbl" id="dqTbl"></table></div>
+  </section>
+
   <div class="grid2">
     <section class="card" id="channel">
       <h2>渠道结构 <span class="tag">私域口径</span></h2>
@@ -1607,6 +1616,34 @@ window.BOARD_DATA = {
       (m.isNew?'<span class="dim">无同期</span>':fw(m.same))+'</td><td>'+(m.achv==null?'—':fw(m.achv)+'%')+'</td><td>'+(m.isNew?'<span class="dim">—</span>':pct(m.yoy))+'</td></tr>';
   });
   document.getElementById('dTbl').innerHTML=dth+dtrs;
+
+  /* ---------- 直营季度同屏 ---------- */
+  var dqs=D.direct.quarters;
+  var dqgps=dqs.map(function(q,i){
+    var note,cls;
+    if(i===0){note='Q1 含新开';cls='gray';}
+    else{note=pctTxt(q.yoy);cls=q.yoy<0?'down':'up';}
+    return {label:q.quarter,bars:[{v:q.out,c:C.blue},{v:q.same,c:C.gray}],note:{text:note,cls:cls}};
+  });
+  document.getElementById('dqLegend').innerHTML=legendHtml([
+    {c:C.blue,label:'2026年出库'},{c:C.gray,label:'2025年同期'},{c:'#333',label:'柱上方=同比'}
+  ]);
+  svgBars(document.getElementById('dqChart'),dqgps,{barDecimals:2});
+  var dqTotOut=r2v(dqs[0].out+dqs[1].out), dqTotTask=r2v(dqs[0].task+dqs[1].task);
+  function r2v(x){return Math.round(x*100)/100;}
+  var dqnote='2026年 Q1→Q2 环比 <b class="'+(dk.qoq>0?'up':'down')+'">'+pctTxt(dk.qoq)+'</b>；'+
+    '2025年同期环比不做（上年Q1仅5月新开销售）；5-8月可比口径同比 <b class="down">'+pctPlain(dk.since5_yoy)+'</b>（'+fw(dk.since5_out)+' / '+fw(dk.since5_same)+' 万）。';
+  document.getElementById('dqNote').innerHTML=dqnote;
+  var dqth='<tr><th>季度</th><th>财年任务(万)</th><th>出库金额(万)</th><th>上年同期(万)</th><th>任务达成</th><th>同比</th><th>环比</th></tr>';
+  var dqtrs='';
+  dqs.forEach(function(q,i){
+    dqtrs+='<tr><td>'+q.quarter+'（'+(i===0?'3-5月':'6-8月')+'）</td><td>'+fw(q.task)+'</td><td>'+fw(q.out)+'</td><td>'+
+      (i===0?'<span class="dim">4.09（仅5月）</span>':fw(q.same))+'</td><td>'+fw(q.achv)+'%</td><td>'+
+      (i===0?'<span class="dim">—（含新开）</span>':pct(q.yoy))+'</td><td>'+(i===0?'—':pct(dk.qoq))+'</td></tr>';
+  });
+  dqtrs+='<tr class="sum"><td>合计</td><td>'+fw(dqTotTask)+'</td><td>'+fw(dqTotOut)+'</td><td>'+fw(r2v(dqs[0].same+dqs[1].same))+'</td>'+
+    '<td>'+fw(dqTotOut/dqTotTask*100)+'%</td><td><span class="dim">—（含新开）</span></td><td>—</td></tr>';
+  document.getElementById('dqTbl').innerHTML=dqth+dqtrs;
 
   /* ---------- 渠道 ---------- */
   var chs=D.channels;
