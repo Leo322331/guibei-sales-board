@@ -1464,6 +1464,7 @@ window.BOARD_DATA = {
     var hi=Math.max(0,Math.max.apply(null,vals));
     lo=Math.floor((lo-40)/50)*50;
     hi=Math.ceil((hi+40)/50)*50;
+    if(opts.minZero)lo=0;
     if(hi-lo<150){var mid=(hi+lo)/2;lo=mid-75;hi=mid+75;}
     function y(v){return padT+(hi-v)/(hi-lo)*ih;}
     function x(i){return labels.length>1?padL+iw*i/(labels.length-1):padL;}
@@ -1471,7 +1472,7 @@ window.BOARD_DATA = {
     for(var gv=lo;gv<=hi+0.1;gv+=50){
       var gy=y(gv);
       s+='<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="#eef0f3" stroke-width="1"/>';
-      s+='<text x="'+(padL-10)+'" y="'+(gy+4)+'" text-anchor="end" font-size="11" fill="#86909c">'+(gv>0?'+':'')+gv+'%</text>';
+      s+='<text x="'+(padL-10)+'" y="'+(gy+4)+'" text-anchor="end" font-size="11" fill="#86909c">'+(gv>0&&!opts.rateAxis?'+':'')+gv+'%</text>';
     }
     var zy=y(0);
     s+='<line x1="'+padL+'" y1="'+zy+'" x2="'+(W-padR)+'" y2="'+zy+'" stroke="#c9cdd4" stroke-width="1.6"/>';
@@ -1497,10 +1498,11 @@ window.BOARD_DATA = {
         s+='<path d="'+seg+'" fill="none" stroke="'+c+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
       }
       if(lastPt){
-        s+='<text x="'+(lastPt.x+8)+'" y="'+(lastPt.y+4)+'" font-size="12" font-weight="600" fill="'+c+'">'+esc(sr.name)+' '+pctTxt(lastPt.v)+'</text>';
+        var endTxt=opts.rateAxis?Math.abs(lastPt.v).toFixed(2)+'%':pctTxt(lastPt.v);
+        s+='<text x="'+(lastPt.x+8)+'" y="'+(lastPt.y+4)+'" font-size="12" font-weight="600" fill="'+c+'">'+esc(sr.name)+' '+endTxt+'</text>';
       }
     });
-    s+='<text x="'+(padL-10)+'" y="14" font-size="11" fill="#86909c">同比%</text>';
+    s+='<text x="'+(padL-10)+'" y="14" font-size="11" fill="#86909c">'+(opts.axisLabel||'同比%')+'</text>';
     s+='</svg>';
     el.innerHTML=s;
   }
@@ -1583,7 +1585,7 @@ window.BOARD_DATA = {
     qtrs+='<tr><td>'+q.quarter+'（'+(i===0?'3-5月':'6-8月')+'）</td><td>'+fw(q.task)+'</td><td>'+fw(q.out)+'</td><td>'+fw(q.same)+'</td>'+
       '<td>'+(q.achv==null?'—':fw(q.achv)+'%')+'</td><td>'+pct(q.yoy)+'</td><td>'+(i===0?'—':pct((q.out-qs[0].out)/qs[0].out))+'</td></tr>';
   });
-  qtrs+='<tr class="sum"><td>合计</td><td>'+fw(qs[0].task+qs[1].task)+'</td><td>'+fw(gk.q1q2_out)+'</td><td>'+fw(gk.q1q2_same)+'</td><td>'+fw(gk.achv)+'%</td><td>'+pct(gk.q1q2_yoy)+'</td><td>—</td></tr>';
+  qtrs+='<tr class="sum"><td>合计</td><td>'+fw(qs[0].task+qs[1].task)+'</td><td>'+fw(gk.q1q2_out)+'</td><td>'+fw(gk.q1q2_same)+'</td><td>'+fw(gk.q1q2_out/(qs[0].task+qs[1].task)*100)+'%</td><td>'+pct(gk.q1q2_yoy)+'</td><td>—</td></tr>';
   document.getElementById('qTbl').innerHTML=qth+qtrs;
 
   /* ---------- 直营 ---------- */
@@ -1629,11 +1631,11 @@ window.BOARD_DATA = {
   });
   document.getElementById('chTbl').innerHTML=cth+ctrs;
   var pv=D.private;
-  var pnote='私域合计 '+fw(chs.filter(function(c){return c.name==='私域';})[0].v26)+' 万：';
+  var pnote='私域构成（按客户映射锁定）：';
   pv.forEach(function(p,i){
     pnote+=(i>0?'；':'')+esc(p.name.replace('柳州市','').replace('广西','').replace('网络科技有限公司',''))+' '+fw(p.v26)+' 万（同比 '+pctTxt(p.yoy)+'）';
   });
-  pnote+='。';
+  pnote+='；合计见上方表格（分项四舍五入，尾差±0.01万）。';
   document.getElementById('chNote').innerHTML=pnote;
 
   /* ---------- 328 ---------- */
@@ -1744,7 +1746,7 @@ window.BOARD_DATA = {
         '<span class="rank-val"><b>'+fw(c.v26)+'</b> 万 · '+fw(totalSel?c.v26/totalSel*100:0,1)+'%</span></div>';
     });
     document.getElementById('custRankBars').innerHTML=h;
-    var note='当前范围：<b>'+(sel==='全部'?'全部销售经理':sel)+'</b> · 客户 '+rows.length+' 家 · 合计 <b>'+fw(totalSel)+' 万</b>。';
+    var note='当前范围：<b>'+(sel==='全部'?'全部销售经理':sel)+'</b> · 客户 '+rows.length+' 家 · 合计 <b>'+fw(sel==='全部'?gk.q1q2_out:totalSel)+' 万</b>。';
     if(sel!=='全部')note+='（另可切回“全部”看整体TOP10）';
     document.getElementById('custRankNote').innerHTML=note;
     var bs=document.getElementById('custSlicer').querySelectorAll('button');
@@ -1780,7 +1782,7 @@ window.BOARD_DATA = {
   function renderMgrTrend(sel){
     var list=sel==='全部'?D.managerTrend:D.managerTrend.filter(function(t){return t.name===sel;});
     var series=list.map(function(t){return {name:t.name,color:mgrColor[t.name],points:t.months.map(function(m){return m.achv;})};});
-    svgLines(document.getElementById('mgrTrendChart'),series,['3月','4月','5月','6月','7月','8月']);
+    svgLines(document.getElementById('mgrTrendChart'),series,['3月','4月','5月','6月','7月','8月'],{rateAxis:true,axisLabel:'任务达成率',minZero:true});
     var leg=list.map(function(t){return {c:mgrColor[t.name],label:t.name+' 月度任务达成率'};});
     document.getElementById('mgrTrendLegend').innerHTML=legendHtml(leg);
     var th='<tr><th>销售经理</th><th>3月</th><th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>8月</th></tr>';
