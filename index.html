@@ -227,6 +227,9 @@ footer li::before{content:"·";position:absolute;left:0;color:var(--blue)}
     <h2>客户销售排行 <span class="tag">26年3-8月 · TOP10</span></h2>
     <div class="desc">按客户 26年3-8月销量（折前）降序；点击下方切片器，可切换查看某一销售经理名下客户的排行情况。客户按其主要业务员归属（少量交叉下单客户归主业务员）。</div>
     <div class="slicer" id="custSlicer"></div>
+    <div style="font-weight:700;font-size:13px;margin:8px 0 2px">客户切片（按26年销量前10）</div>
+    <div class="slicer" id="custCustSlicer"></div>
+    <div id="custDetailBox"></div>
     <div id="custRankBars"></div>
     <div class="note" id="custRankNote"></div>
   </section>
@@ -1102,6 +1105,478 @@ window.BOARD_DATA = {
    "salesman": "吴伟达"
   }
  ],
+ "custMonthlyTop": [
+  {
+   "name": "柳州市汪佳食品有限公司",
+   "rank": 1,
+   "v26": 161.7,
+   "v25": 238.37,
+   "yoy": -32.16,
+   "share26": 23.16,
+   "salesman": "吴伟达",
+   "months": [
+    {
+     "month": 3,
+     "v26": 30.88,
+     "v25": 22.69,
+     "yoy": 36.1
+    },
+    {
+     "month": 4,
+     "v26": 39.42,
+     "v25": 69.13,
+     "yoy": -42.98
+    },
+    {
+     "month": 5,
+     "v26": 17.48,
+     "v25": 22.89,
+     "yoy": -23.63
+    },
+    {
+     "month": 6,
+     "v26": 20.76,
+     "v25": 18.9,
+     "yoy": 9.84
+    },
+    {
+     "month": 7,
+     "v26": 21.77,
+     "v25": 49.25,
+     "yoy": -55.8
+    },
+    {
+     "month": 8,
+     "v26": 31.39,
+     "v25": 55.51,
+     "yoy": -43.45
+    }
+   ]
+  },
+  {
+   "name": "柳州市吉彩商贸有限责任公司",
+   "rank": 2,
+   "v26": 135.85,
+   "v25": 162.14,
+   "yoy": -16.22,
+   "share26": 19.46,
+   "salesman": "吴伟达",
+   "months": [
+    {
+     "month": 3,
+     "v26": 14.73,
+     "v25": 31.29,
+     "yoy": -52.92
+    },
+    {
+     "month": 4,
+     "v26": 38.31,
+     "v25": 30.74,
+     "yoy": 24.63
+    },
+    {
+     "month": 5,
+     "v26": 19.87,
+     "v25": 20.21,
+     "yoy": -1.68
+    },
+    {
+     "month": 6,
+     "v26": 11.2,
+     "v25": 9.8,
+     "yoy": 14.29
+    },
+    {
+     "month": 7,
+     "v26": 21.57,
+     "v25": 28.6,
+     "yoy": -24.58
+    },
+    {
+     "month": 8,
+     "v26": 30.17,
+     "v25": 41.5,
+     "yoy": -27.3
+    }
+   ]
+  },
+  {
+   "name": "柳州市春日网络科技有限公司",
+   "rank": 3,
+   "v26": 118.85,
+   "v25": 89.03,
+   "yoy": 33.5,
+   "share26": 17.02,
+   "salesman": "吴伟达",
+   "months": [
+    {
+     "month": 3,
+     "v26": 24.76,
+     "v25": 8.05,
+     "yoy": 207.58
+    },
+    {
+     "month": 4,
+     "v26": 14.24,
+     "v25": 10.48,
+     "yoy": 35.88
+    },
+    {
+     "month": 5,
+     "v26": 13.39,
+     "v25": 13.97,
+     "yoy": -4.15
+    },
+    {
+     "month": 6,
+     "v26": 11.22,
+     "v25": 28.16,
+     "yoy": -60.16
+    },
+    {
+     "month": 7,
+     "v26": 13.72,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 8,
+     "v26": 41.51,
+     "v25": 28.37,
+     "yoy": 46.32
+    }
+   ]
+  },
+  {
+   "name": "柳州市柳南区超利食品店",
+   "rank": 4,
+   "v26": 76.87,
+   "v25": 140.55,
+   "yoy": -45.31,
+   "share26": 11.01,
+   "salesman": "吴伟达",
+   "months": [
+    {
+     "month": 3,
+     "v26": 11.17,
+     "v25": 24.3,
+     "yoy": -54.03
+    },
+    {
+     "month": 4,
+     "v26": 0.74,
+     "v25": 38.79,
+     "yoy": -98.09
+    },
+    {
+     "month": 5,
+     "v26": 7.2,
+     "v25": 11.24,
+     "yoy": -35.94
+    },
+    {
+     "month": 6,
+     "v26": 13.35,
+     "v25": 18.18,
+     "yoy": -26.57
+    },
+    {
+     "month": 7,
+     "v26": 16.61,
+     "v25": 16.44,
+     "yoy": 1.03
+    },
+    {
+     "month": 8,
+     "v26": 27.81,
+     "v25": 31.61,
+     "yoy": -12.02
+    }
+   ]
+  },
+  {
+   "name": "广西柳州市螺大叔网络科技有限公司",
+   "rank": 5,
+   "v26": 56.77,
+   "v25": 58.31,
+   "yoy": -2.64,
+   "share26": 8.13,
+   "salesman": "吴伟达",
+   "months": [
+    {
+     "month": 3,
+     "v26": 23.91,
+     "v25": 12.23,
+     "yoy": 95.5
+    },
+    {
+     "month": 4,
+     "v26": 1.34,
+     "v25": 13.68,
+     "yoy": -90.2
+    },
+    {
+     "month": 5,
+     "v26": 11.0,
+     "v25": 11.32,
+     "yoy": -2.83
+    },
+    {
+     "month": 6,
+     "v26": 4.27,
+     "v25": 6.4,
+     "yoy": -33.28
+    },
+    {
+     "month": 7,
+     "v26": 10.74,
+     "v25": 6.41,
+     "yoy": 67.55
+    },
+    {
+     "month": 8,
+     "v26": 5.49,
+     "v25": 8.27,
+     "yoy": -33.62
+    }
+   ]
+  },
+  {
+   "name": "广西惠兴达供应链有限公司",
+   "rank": 6,
+   "v26": 21.2,
+   "v25": 16.09,
+   "yoy": 31.74,
+   "share26": 3.04,
+   "salesman": "龙碧霞",
+   "months": [
+    {
+     "month": 3,
+     "v26": 2.03,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 4,
+     "v26": 4.51,
+     "v25": 2.11,
+     "yoy": 113.74
+    },
+    {
+     "month": 5,
+     "v26": 1.8,
+     "v25": 3.45,
+     "yoy": -47.83
+    },
+    {
+     "month": 6,
+     "v26": 1.07,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 7,
+     "v26": 9.05,
+     "v25": 3.28,
+     "yoy": 175.91
+    },
+    {
+     "month": 8,
+     "v26": 2.75,
+     "v25": 7.26,
+     "yoy": -62.12
+    }
+   ]
+  },
+  {
+   "name": "柳州市同喜贸易有限责任公司",
+   "rank": 7,
+   "v26": 17.32,
+   "v25": 1.97,
+   "yoy": 777.85,
+   "share26": 2.48,
+   "salesman": "吴伟达",
+   "months": [
+    {
+     "month": 3,
+     "v26": 0.71,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 4,
+     "v26": 1.02,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 5,
+     "v26": 6.91,
+     "v25": 0.43,
+     "yoy": 1506.98
+    },
+    {
+     "month": 6,
+     "v26": 5.2,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 7,
+     "v26": 3.0,
+     "v25": 0.67,
+     "yoy": 347.76
+    },
+    {
+     "month": 8,
+     "v26": 0.48,
+     "v25": 0.88,
+     "yoy": -45.45
+    }
+   ]
+  },
+  {
+   "name": "柳州市后天商贸有限责任公司",
+   "rank": 8,
+   "v26": 17.27,
+   "v25": 0.0,
+   "yoy": null,
+   "share26": 2.47,
+   "salesman": "吴伟达",
+   "months": [
+    {
+     "month": 3,
+     "v26": 0.0,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 4,
+     "v26": 2.83,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 5,
+     "v26": 3.03,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 6,
+     "v26": 3.04,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 7,
+     "v26": 3.11,
+     "v25": 0.0,
+     "yoy": null
+    },
+    {
+     "month": 8,
+     "v26": 5.26,
+     "v25": 0.0,
+     "yoy": null
+    }
+   ]
+  },
+  {
+   "name": "柳州市壮品故香贸易有限公司",
+   "rank": 9,
+   "v26": 16.55,
+   "v25": 20.81,
+   "yoy": -20.46,
+   "share26": 2.37,
+   "salesman": "吴伟达",
+   "months": [
+    {
+     "month": 3,
+     "v26": 1.58,
+     "v25": 3.08,
+     "yoy": -48.7
+    },
+    {
+     "month": 4,
+     "v26": 4.47,
+     "v25": 4.2,
+     "yoy": 6.43
+    },
+    {
+     "month": 5,
+     "v26": 2.07,
+     "v25": 3.91,
+     "yoy": -47.06
+    },
+    {
+     "month": 6,
+     "v26": 2.07,
+     "v25": 1.78,
+     "yoy": 16.29
+    },
+    {
+     "month": 7,
+     "v26": 3.1,
+     "v25": 3.57,
+     "yoy": -13.17
+    },
+    {
+     "month": 8,
+     "v26": 3.27,
+     "v25": 4.26,
+     "yoy": -23.24
+    }
+   ]
+  },
+  {
+   "name": "桂林市金羽食品有限公司",
+   "rank": 10,
+   "v26": 14.9,
+   "v25": 32.37,
+   "yoy": -53.97,
+   "share26": 2.13,
+   "salesman": "龙碧霞",
+   "months": [
+    {
+     "month": 3,
+     "v26": 5.92,
+     "v25": 5.24,
+     "yoy": 12.98
+    },
+    {
+     "month": 4,
+     "v26": 0.0,
+     "v25": 6.08,
+     "yoy": -100.0
+    },
+    {
+     "month": 5,
+     "v26": 1.55,
+     "v25": 1.85,
+     "yoy": -16.22
+    },
+    {
+     "month": 6,
+     "v26": 2.26,
+     "v25": 3.37,
+     "yoy": -32.94
+    },
+    {
+     "month": 7,
+     "v26": 4.62,
+     "v25": 11.51,
+     "yoy": -59.86
+    },
+    {
+     "month": 8,
+     "v26": 0.55,
+     "v25": 4.32,
+     "yoy": -87.27
+    }
+   ]
+  }
+ ],
  "managerTrend": [
   {
    "name": "吴伟达",
@@ -1767,8 +2242,23 @@ window.BOARD_DATA = {
 
   /* ---------- 客户销售排行（切片器） ---------- */
   var custRankRows=D.customerRank;
+  var custMonthly=D.custMonthlyTop;
   var salesmanNames=Object.keys(D.salesmanTot);
+  var curMgr='全部';
+  var currentCust='all';
+  function shortName(n){
+    n=String(n);
+    ['广西柳州市','柳州市','桂林市','梧州市','河池市','贺州市','来宾市','广西','柳州'].forEach(function(p){
+      if(n.indexOf(p)===0)n=n.slice(p.length);
+    });
+    ['有限责任公司','网络科技有限公司','商贸有限公司','食品有限公司','贸易有限公司','供应链有限公司',
+     '百货商行','食品经营部','有限公司','食品店','公司','商行','食品','商贸','贸易','网络科技'].forEach(function(s){
+      if(n.length>s.length&&n.slice(n.length-s.length)===s)n=n.slice(0,n.length-s.length);
+    });
+    return n;
+  }
   function renderCustRank(sel){
+    curMgr=sel;
     var rows=sel==='全部'?custRankRows:custRankRows.filter(function(c){return c.salesman===sel;});
     var top=rows.slice(0,10);
     var maxV=top.length?top[0].v26:0;
@@ -1789,13 +2279,63 @@ window.BOARD_DATA = {
     var bs=document.getElementById('custSlicer').querySelectorAll('button');
     bs.forEach(function(b){b.className=b.dataset.m===sel?'on':'';});
   }
+  function setCustActive(v){
+    var bs=document.getElementById('custCustSlicer').querySelectorAll('button');
+    bs.forEach(function(b){b.className=b.getAttribute('data-n')===v?'on':'';});
+  }
+  function renderCustDetail(name){
+    currentCust=name;
+    setCustActive(name);
+    var d=null;
+    custMonthly.forEach(function(c){if(c.name===name)d=c;});
+    if(!d){currentCust='all';renderCustRank(curMgr);return;}
+    document.getElementById('custRankBars').innerHTML='';
+    document.getElementById('custRankNote').innerHTML='';
+    var sumTxt='<div style="font-weight:700;font-size:14px;margin:2px 0 4px">第 '+d.rank+' 名 · '+esc(d.name)+
+      '<span style="font-weight:400;color:var(--sub);font-size:12px">（主业务员：'+esc(d.salesman)+'）</span></div>'+
+      '<div class="note">26年3-8月 <b>'+fw(d.v26)+' 万</b> · 25年同期 '+fw(d.v25)+' 万 · 同比 '+
+      (d.yoy==null?'<span class="dim">新增客户</span>':pct(d.yoy))+' · 占全部客户 <b>'+fw(d.share26)+'%</b></div>'+
+      '<div style="font-size:13px;font-weight:700;margin:10px 0 2px">月度出库对比（26年 vs 25年同期）</div>'+
+      '<div class="legend"><span><i style="background:'+C.blue+'"></i>2026年出库</span>'+
+      '<span><i style="background:'+C.gray+'"></i>2025年同期</span><span style="color:var(--sub)">柱上方=当月同比</span></div>'+
+      '<div class="chart-scroll"><div id="custDetailChart"></div></div>';
+    document.getElementById('custDetailBox').innerHTML=sumTxt;
+    var groups=d.months.map(function(m){
+      var bars=[];
+      if(m.v26>0)bars.push({v:m.v26,c:C.blue});
+      if(m.v25>0)bars.push({v:m.v25,c:C.gray});
+      var note=null;
+      if(m.yoy!=null)note={text:pctTxt(m.yoy),cls:m.yoy<0?'down':'up'};
+      else if(m.v26>0&&m.v25===0)note={text:'新增',cls:'gray'};
+      else if(m.v26===0&&m.v25>0)note={text:'-100%',cls:'down'};
+      return {label:m.month+'月',bars:bars,note:note};
+    });
+    svgBars(document.getElementById('custDetailChart'),groups,{barDecimals:2});
+  }
   (function buildSlicer(){
     var h='<button class="on" data-m="全部">全部销售经理</button>';
     salesmanNames.forEach(function(n){h+='<button data-m="'+esc(n)+'">'+esc(n)+'</button>';});
     document.getElementById('custSlicer').innerHTML=h;
     document.getElementById('custSlicer').addEventListener('click',function(e){
       var b=e.target.closest?e.target.closest('button'):null;
-      if(b)renderCustRank(b.getAttribute('data-m'));
+      if(b){
+        if(currentCust!=='all'){currentCust='all';document.getElementById('custDetailBox').innerHTML='';setCustActive('all');}
+        renderCustRank(b.getAttribute('data-m'));
+      }
+    });
+  })();
+  (function buildCustSlicer(){
+    var h='<button class="on" data-n="all">全部客户（TOP10）</button>';
+    custMonthly.forEach(function(d){
+      h+='<button data-n="'+esc(d.name)+'" title="'+esc(d.name)+'">'+d.rank+' '+esc(shortName(d.name))+'</button>';
+    });
+    document.getElementById('custCustSlicer').innerHTML=h;
+    document.getElementById('custCustSlicer').addEventListener('click',function(e){
+      var b=e.target.closest?e.target.closest('button'):null;
+      if(!b)return;
+      var n=b.getAttribute('data-n');
+      if(n==='all'){currentCust='all';document.getElementById('custDetailBox').innerHTML='';renderCustRank(curMgr);}
+      else renderCustDetail(n);
     });
   })();
   renderCustRank('全部');
