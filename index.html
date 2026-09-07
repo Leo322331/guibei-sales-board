@@ -1573,7 +1573,7 @@ window.BOARD_DATA = {
   document.getElementById('qLegend').innerHTML=legendHtml([{c:C.blue,label:'2026年出库'},{c:C.gray,label:'2025年同期'},{c:'#333',label:'柱上方=同比'}]);
   svgBars(document.getElementById('qChart'),qgps,{barDecimals:2});
   var qnote='<span>2026年 Q1→Q2 环比 <b class="'+(gk.qoq>0?'up':'down')+'">'+pctTxt(gk.qoq)+'</b></span>';
-  var q25qoq=Math.round((qs[1].out-qs[0].out)/qs[0].out*10000)/100;
+  var q25qoq=Math.round((qs[1].same-qs[0].same)/qs[0].same*10000)/100;
   qnote+='<span>2025年同期 Q1→Q2 环比 <b class="'+(q25qoq>0?'up':'down')+'">'+pctTxt(q25qoq)+'</b></span>';
   qnote+='<span>3-8月整体同比 <b class="down">'+pctPlain(gk.q1q2_yoy)+'</b>（'+fw(gk.q1q2_out)+' / '+fw(gk.q1q2_same)+' 万）</span>';
   document.getElementById('qNote').innerHTML=qnote;
