@@ -2071,7 +2071,7 @@ window.BOARD_DATA = {
   var qtrs='';
   qs.forEach(function(q,i){
     qtrs+='<tr><td>'+q.quarter+'（'+(i===0?'3-5月':'6-8月')+'）</td><td>'+fw(q.task)+'</td><td>'+fw(q.out)+'</td><td>'+fw(q.same)+'</td>'+
-      '<td>'+(q.achv==null?'—':fw(q.achv)+'%')+'</td><td>'+pct(q.yoy)+'</td><td>'+(i===0?'—':pct((q.out-qs[0].out)/qs[0].out))+'</td></tr>';
+      '<td>'+(q.achv==null?'—':fw(q.achv)+'%')+'</td><td>'+pct(q.yoy)+'</td><td>'+(i===0?'—':pct((q.out-qs[0].out)/qs[0].out*100))+'</td></tr>';
   });
   qtrs+='<tr class="sum"><td>合计</td><td>'+fw(qs[0].task+qs[1].task)+'</td><td>'+fw(gk.q1q2_out)+'</td><td>'+fw(gk.q1q2_same)+'</td><td>'+fw(gk.q1q2_out/(qs[0].task+qs[1].task)*100)+'%</td><td>'+pct(gk.q1q2_yoy)+'</td><td>—</td></tr>';
   document.getElementById('qTbl').innerHTML=qth+qtrs;
