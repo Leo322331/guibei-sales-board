@@ -236,10 +236,13 @@ footer li::before{content:"·";position:absolute;left:0;color:var(--blue)}
 
   <section class="card" id="mgr">
     <h2>销售经理达成 <span class="tag">补充参考</span></h2>
-    <div class="desc">按“销售经理总业绩-品牌”表导出（吴伟达 / 龙碧霞）；与区域汇总表存在导出范围尾差，不作为主口径。</div>
+    <div class="desc">按“销售经理总业绩-品牌”表导出（吴伟达 / 龙碧霞）；含任务达成率与月度同比两张趋势图，均可按切片切换；与区域汇总表存在导出范围尾差，不作为主口径。</div>
     <div class="slicer" id="mgrSlicer"></div>
     <div class="legend" id="mgrTrendLegend"></div>
     <div class="chart-scroll"><div id="mgrTrendChart"></div></div>
+    <div style="font-weight:700;font-size:14px;margin:14px 0 2px">月度同比（%）</div>
+    <div class="legend" id="mgrYoyLegend"></div>
+    <div class="chart-scroll"><div id="mgrYoyChart"></div></div>
     <div class="tbl-wrap"><table class="tbl" id="mgrTrendTbl"></table></div>
     <div class="tbl-wrap"><table class="tbl" id="mgrTbl"></table></div>
     <div class="note" id="mgrShare"></div>
@@ -2375,11 +2378,18 @@ window.BOARD_DATA = {
     list.forEach(function(t){
       trs+='<tr><td style="color:'+mgrColor[t.name]+';font-weight:600">'+esc(t.name)+'</td>';
       t.months.forEach(function(m){
-        trs+='<td>'+fw(m.out)+' 万<br><span class="'+(m.achv!=null&&m.achv>100?'up':'dim')+'">'+(m.achv==null?'—':fw(m.achv)+'%')+'</span></td>';
+        trs+='<td>'+fw(m.out)+' 万<br><span class="'+(m.achv!=null&&m.achv>100?'up':'dim')+'">'+(m.achv==null?'—':fw(m.achv)+'%')+'</span>'+
+          '<br><span class="'+(m.yoy!=null&&m.yoy<0?'down':'up')+'">'+(m.yoy==null?'—':pctPlain(m.yoy))+'</span></td>';
       });
       trs+='</tr>';
     });
     document.getElementById('mgrTrendTbl').innerHTML=th+trs;
+    var yLeg=list.map(function(t){return {c:mgrColor[t.name],label:t.name+' 月度同比'};});
+    document.getElementById('mgrYoyLegend').innerHTML=legendHtml(yLeg);
+    var ySeries=list.map(function(t){
+      return {name:t.name,color:mgrColor[t.name],points:t.months.map(function(m){return m.yoy;})};
+    });
+    svgLines(document.getElementById('mgrYoyChart'),ySeries,['3月','4月','5月','6月','7月','8月']);
     var bs=document.getElementById('mgrSlicer').querySelectorAll('button');
     bs.forEach(function(b){b.className=b.dataset.m===sel?'on':'';});
   }
