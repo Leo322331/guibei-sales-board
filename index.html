@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>桂北·直营 季度经营看板</title>
+<style>
+:root{
+  --blue:#3370ff; --blue-2:#0e42d2; --gray:#f5f6f7; --line:#e5e6eb;
+  --txt:#1d2129; --sub:#86909c; --red:#f53f3f; --green:#00b42a;
+  --purple:#722ed1; --orange:#ff7d00; --teal:#14c9c9; --ink:#0b1f66;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;background:var(--gray);color:var(--txt);line-height:1.5}
+.wrap{max-width:1280px;margin:0 auto;padding:18px 20px 60px}
+/* 头部 */
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#0e42d2,#3370ff);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.title h1{font-size:22px;font-weight:700;letter-spacing:.5px}
+.title .sub{color:var(--sub);font-size:13px;margin-top:2px}
+.meta-chip{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12px;color:var(--sub);margin:4px 2px 0 0}
+.no-print{white-space:nowrap}
+button.act{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer}
+button.act:hover{background:var(--blue-2)}
+/* 导航 */
+nav.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px}
+nav.chips a{background:#fff;border:1px solid var(--line);color:#4e5969;border-radius:999px;padding:5px 12px;font-size:13px;text-decoration:none}
+nav.chips a:hover{border-color:var(--blue);color:var(--blue)}
+/* 卡片通用 */
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(15,23,42,.04)}
+.card h2{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.card h2 .tag{font-size:11px;font-weight:400;background:#eef3ff;color:var(--blue);border-radius:6px;padding:2px 8px}
+.card .desc{color:var(--sub);font-size:12.5px;margin:2px 0 12px}
+.legend{display:flex;gap:16px;align-items:center;font-size:12px;color:#4e5969;margin:4px 0 8px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.chart-scroll{overflow-x:auto}
+svg{display:block;width:100%;height:auto}
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi .scope{font-size:11px;color:var(--blue);font-weight:600;letter-spacing:1px}
+.kpi .label{color:var(--sub);font-size:12px;margin-top:6px}
+.kpi .val{font-size:26px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .val small{font-size:13px;color:var(--sub);font-weight:400;margin-left:2px}
+.kpi .sub{font-size:12px;margin-top:6px;color:#4e5969}
+.kpi .sub b.up{color:var(--green)} .kpi .sub b.down{color:var(--red)}
+.kpi::after{content:"";position:absolute;right:-28px;top:-28px;width:90px;height:90px;border-radius:50%;background:rgba(51,112,255,.07)}
+.kpi.hl::after{background:rgba(114,46,209,.08)}
+/* 表格 */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:#f7f8fa;color:#4e5969;font-weight:600;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl td{padding:7px 10px;text-align:right;border-bottom:1px solid #f2f3f5;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.sum td{background:#fafbff;font-weight:700}
+.tbl .hl td{background:#fff7f7}
+.tbl .up{color:var(--green)} .tbl .down{color:var(--red)} .tbl .dim{color:var(--sub)}
+.tbl-wrap{overflow-x:auto;margin-top:8px}
+.grid2{display:grid;grid-template-columns:1.45fr 1fr;gap:16px;align-items:start}
+.grid2b{display:grid;grid-template-columns:1fr 1.35fr;gap:16px;align-items:start}
+@media (max-width:980px){.grid2,.grid2b{grid-template-columns:1fr}}
+/* 渠道堆叠条 */
+.stack{height:44px;border-radius:9px;overflow:hidden;display:flex;margin:6px 0 4px;background:#f2f3f5}
+.stack div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:11.5px;white-space:nowrap;min-width:0}
+.stack .thin{font-size:10.5px}
+.legend .chips{display:flex;flex-wrap:wrap;gap:6px}
+.legend .chips span{display:inline-flex;align-items:center;gap:4px;background:#f7f8fa;border-radius:6px;padding:2px 7px;font-size:11.5px;color:#4e5969}
+.note{background:#f7f8fa;border-radius:8px;padding:9px 12px;font-size:12px;color:#4e5969;margin-top:10px}
+.note b{color:var(--txt)}
+.ai{background:linear-gradient(135deg,#eef3ff,#f7f4ff);border:1px solid #dfe8ff;border-radius:10px;padding:11px 14px;font-size:13px;color:#1d2129;margin-bottom:14px}
+.ai .lab{font-weight:700;color:var(--blue-2);margin-right:6px}
+.badge{display:inline-block;background:#e8ffea;color:#009a29;border-radius:6px;padding:1px 7px;font-size:11px;font-weight:600;margin-left:6px}
+.badge.red{background:#ffece8;color:#d91f1f}
+.badge.gray{background:#f2f3f5;color:#4e5969}
+.qline{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:#4e5969;margin-top:6px}
+.qline b.up{color:var(--green)} .qline b.down{color:var(--red)}
+/* 品项占比 */
+.hb{margin-bottom:2px}
+.hb-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:#4e5969;margin:2px 0 1px}
+.hb-top .hb-name{font-weight:600;color:var(--txt)}
+.hb-top .hb-v{color:var(--sub);font-size:12px}
+.hb-bar{height:15px;background:#eef0f3;border-radius:8px;overflow:hidden;margin-bottom:9px}
+.hb-bar>div{height:100%;border-radius:8px}
+.slicer{display:flex;gap:6px;margin:2px 0 10px;flex-wrap:wrap}
+.slicer button{border:1px solid #d9d9d9;background:#fff;border-radius:999px;padding:4px 13px;font-size:12.5px;cursor:pointer;color:#4e5969}
+.slicer button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.rank-row{display:flex;align-items:center;gap:10px;font-size:12.5px;margin:3px 0}
+.rank-no{flex:none;width:22px;height:22px;border-radius:7px;background:#eef0f3;color:#4e5969;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11.5px}
+.rank-no.t{background:var(--blue);color:#fff}
+.rank-no.t2{background:#a3c0ff;color:#fff}
+.rank-no.t3{background:#cfe0ff;color:#0e42d2}
+.rank-name{flex:none;width:235px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-track{flex:1;background:#f2f3f5;border-radius:8px;height:16px;overflow:hidden}
+.rank-track>div{height:100%;border-radius:8px;background:var(--blue)}
+.rank-val{flex:none;width:120px;text-align:right;color:#4e5969;font-variant-numeric:tabular-nums}
+.rank-val b{color:var(--txt)}
+footer{color:var(--sub);font-size:12px;margin-top:6px}
+footer li{margin:3px 0;list-style:none;padding-left:12px;position:relative}
+footer li::before{content:"·";position:absolute;left:0;color:var(--blue)}
+@media print{
+  body{background:#fff}
+  .no-print,nav.chips{display:none!important}
+  .card{box-shadow:none;break-inside:avoid;border-color:#d9d9d9}
+  .wrap{max-width:100%;padding:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="logo">螺</div>
+      <div class="title">
+        <h1 id="pageTitle">桂北·直营 季度经营看板</h1>
+        <div class="sub" id="pageSub"></div>
+      </div>
+    </div>
+    <button class="act no-print" onclick="window.print()">打印 / 存 PDF</button>
+  </div>
+  <div id="metaChips" style="margin-bottom:4px"></div>
+  <nav class="chips no-print">
+    <a href="#kpi">关键指标</a>
+    <a href="#month">月度出库对比</a>
+    <a href="#quarter">季度·同比环比</a>
+    <a href="#direct">直营趋势</a>
+    <a href="#channel">渠道结构</a>
+    <a href="#cat">品项占比/趋势</a>
+    <a href="#p328">328新品</a>
+    <a href="#cust">客户跌幅</a>
+    <a href="#custRank">客户排行</a>
+    <a href="#mgr">销售经理</a>
+    <a href="#note">口径说明</a>
+  </nav>
+
+  <div id="aiLine"></div>
+
+  <section id="kpi"><div class="kpis" id="kpiBox"></div></section>
+
+  <section class="card" id="month">
+    <h2>桂北 月度出库对比 <span class="tag">任务 · 同期 · 同比</span></h2>
+    <div class="desc">2026财年3-8月（单位：万元，出库金额=价税合计折前）；柱上标注为当月同比，柱内数字已加数据标签。</div>
+    <div class="legend" id="monthLegend"></div>
+    <div class="chart-scroll"><div id="monthChart"></div></div>
+    <div class="tbl-wrap"><table class="tbl" id="monthTbl"></table></div>
+  </section>
+
+  <section class="card" id="quarter">
+    <h2>季度柱状 · 环比 / 同比同屏 <span class="tag">Q1=3-5月 Q2=6-8月</span></h2>
+    <div class="desc">柱体=当季出库 vs 上年同期；柱上方红绿色数字=季度同比；底部另标季度环比。</div>
+    <div class="legend" id="qLegend"></div>
+    <div class="chart-scroll"><div id="qChart"></div></div>
+    <div class="qline" id="qNote"></div>
+    <div class="tbl-wrap"><table class="tbl" id="qTbl"></table></div>
+  </section>
+
+  <section class="card" id="direct">
+    <h2>直营 3-8月趋势 <span class="tag">新业务板块</span></h2>
+    <div class="desc">直营3、4月为新开业务、无上年同期，标“新开”；5月起与上年同期对比。</div>
+    <div class="legend" id="dLegend"></div>
+    <div class="chart-scroll"><div id="dChart"></div></div>
+    <div class="tbl-wrap"><table class="tbl" id="dTbl"></table></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card" id="channel">
+      <h2>渠道结构 <span class="tag">私域口径</span></h2>
+      <div class="desc">私域=螺大叔、春日（按客户映射锁定，与样板口径一致）；占比按 2026年3-8月折前金额。</div>
+      <div id="channelStack"></div>
+      <div class="legend" id="chLegend"></div>
+      <div class="tbl-wrap"><table class="tbl" id="chTbl"></table></div>
+      <div class="note" id="chNote"></div>
+    </section>
+    <section class="card" id="p328">
+      <h2>328 爆炒粉（新品）<span class="tag">9月起改独立明细表</span></h2>
+      <div class="desc">占比保留两位小数：按当月总出库（折前）计算；重点核对 5月 与 8月。</div>
+      <div class="chart-scroll"><div id="p328Chart"></div></div>
+      <div class="tbl-wrap"><table class="tbl" id="p328Tbl"></table></div>
+      <div class="note" id="p328Note"></div>
+    </section>
+  </div>
+
+  <section class="card" id="cat">
+    <h2>品项结构 · 占比与同期比趋势 <span class="tag">按品项类别</span></h2>
+    <div class="desc">占比按 2026年3-8月折前金额计算；趋势图为各主品项逐月同比（与上年同月对比），328等新品无上年同期、不进入同比线。</div>
+    <div class="grid2b">
+      <div>
+        <div style="font-weight:700;font-size:14px;margin:2px 0 6px">品项占比（26年3-8月）</div>
+        <div id="catShare"></div>
+        <div class="tbl-wrap"><table class="tbl" id="catTbl"></table></div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:14px;margin:2px 0 2px">品项同期比趋势（月度同比 %）</div>
+        <div class="legend" id="catLegend"></div>
+        <div class="chart-scroll"><div id="catTrendChart"></div></div>
+        <div class="tbl-wrap"><table class="tbl" id="catTrendTbl"></table></div>
+        <div class="note" id="catNote"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="cust">
+    <h2>客户同期对比 · 跌幅分析 <span class="tag">金羽等重点客户</span></h2>
+    <div class="desc">同比区间同为 3-8月（折前）。只列上年同期 ≥3万元且今年下滑的客户，按减少金额排序。</div>
+    <div class="grid2b">
+      <div>
+        <div class="tbl-wrap"><table class="tbl" id="declTbl"></table></div>
+        <div class="note" id="declNote"></div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;margin:4px 0 2px">重点：桂林市金羽食品 月度对比</div>
+        <div class="chart-scroll"><div id="jyChart"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="custRank">
+    <h2>客户销售排行 <span class="tag">26年3-8月 · TOP10</span></h2>
+    <div class="desc">按客户 26年3-8月销量（折前）降序；点击下方切片器，可切换查看某一销售经理名下客户的排行情况。客户按其主要业务员归属（少量交叉下单客户归主业务员）。</div>
+    <div class="slicer" id="custSlicer"></div>
+    <div id="custRankBars"></div>
+    <div class="note" id="custRankNote"></div>
+  </section>
+
+  <section class="card" id="mgr">
+    <h2>销售经理达成 <span class="tag">补充参考</span></h2>
+    <div class="desc">按“销售经理总业绩-品牌”表导出（吴伟达 / 龙碧霞）；与区域汇总表存在导出范围尾差，不作为主口径。</div>
+    <div class="slicer" id="mgrSlicer"></div>
+    <div class="legend" id="mgrTrendLegend"></div>
+    <div class="chart-scroll"><div id="mgrTrendChart"></div></div>
+    <div class="tbl-wrap"><table class="tbl" id="mgrTrendTbl"></table></div>
+    <div class="tbl-wrap"><table class="tbl" id="mgrTbl"></table></div>
+  </section>
+
+  <section class="card" id="note">
+    <h2>口径与数据说明</h2>
+    <div id="noteBody"></div>
+  </section>
+</div>
+
+<script>
+/* 自动生成：build_data.py，请勿手改 */
+window.BOARD_DATA = {
+ "meta": {
+  "title": "桂北·直营 季度经营看板",
+  "subtitle": "2026财年 3-8月（Q1-Q2）· 季度会演示版",
+  "builtAt": "2026-09-05",
+  "source": "飞书多维表格导出：客户出库单 ×2、区域/直营/销售经理总业绩 ×3",
+  "cutoff": "2026-08-31"
+ },
+ "guibei": {
+  "kpi": {
+   "task": 2357.0,
+   "same": 2186.98,
+   "out": 698.26,
+   "achv": 29.62,
+   "q1q2_same": 883.29,
+   "q1q2_out": 698.26,
+   "q1q2_yoy": -20.95,
+   "qoq": 14.49
+  },
+  "months": [
+   {
+    "period": "2603",
+    "month": 3,
+    "task": 130.0,
+    "same": 133.09,
+    "out": 120.38,
+    "achv": 92.6,
+    "yoy": -9.55
+   },
+   {
+    "period": "2604",
+    "month": 4,
+    "task": 180.0,
+    "same": 200.95,
+    "out": 115.39,
+    "achv": 64.1,
+    "yoy": -42.58
+   },
+   {
+    "period": "2605",
+    "month": 5,
+    "task": 103.0,
+    "same": 103.3,
+    "out": 89.78,
+    "achv": 87.16,
+    "yoy": -13.09
+   },
+   {
+    "period": "2606",
+    "month": 6,
+    "task": 104.0,
+    "same": 104.67,
+    "out": 83.69,
+    "achv": 80.47,
+    "yoy": -20.04
+   },
+   {
+    "period": "2607",
+    "month": 7,
+    "task": 140.0,
+    "same": 140.3,
+    "out": 119.65,
+    "achv": 85.46,
+    "yoy": -14.72
+   },
+   {
+    "period": "2608",
+    "month": 8,
+    "task": 200.0,
+    "same": 200.97,
+    "out": 169.38,
+    "achv": 84.69,
+    "yoy": -15.72
+   }
+  ],
+  "quarters": [
+   {
+    "quarter": "Q1",
+    "task": 413.0,
+    "same": 437.35,
+    "out": 325.54,
+    "achv": 78.82,
+    "yoy": -25.56
+   },
+   {
+    "quarter": "Q2",
+    "task": 444.0,
+    "same": 445.94,
+    "out": 372.72,
+    "achv": 83.95,
+    "yoy": -16.42
+   }
+  ]
+ },
+ "direct": {
+  "kpi": {
+   "task": 317.0,
+   "same": 209.54,
+   "out": 82.18,
+   "achv": 25.92,
+   "since5_out": 52.48,
+   "since5_same": 62.37,
+   "since5_yoy": -15.86,
+   "qoq": -7.59
+  },
+  "months": [
+   {
+    "period": "2603",
+    "month": 3,
+    "task": 15.0,
+    "same": 0.0,
+    "out": 10.8,
+    "achv": 72.02,
+    "yoy": null,
+    "isNew": true
+   },
+   {
+    "period": "2604",
+    "month": 4,
+    "task": 20.0,
+    "same": 0.0,
+    "out": 18.9,
+    "achv": 94.48,
+    "yoy": null,
+    "isNew": true
+   },
+   {
+    "period": "2605",
+    "month": 5,
+    "task": 20.0,
+    "same": 4.09,
+    "out": 13.01,
+    "achv": 65.05,
+    "yoy": 218.27
+   },
+   {
+    "period": "2606",
+    "month": 6,
+    "task": 15.0,
+    "same": 5.64,
+    "out": 8.09,
+    "achv": 53.95,
+    "yoy": 43.47
+   },
+   {
+    "period": "2607",
+    "month": 7,
+    "task": 22.0,
+    "same": 20.72,
+    "out": 11.38,
+    "achv": 51.71,
+    "yoy": -45.1
+   },
+   {
+    "period": "2608",
+    "month": 8,
+    "task": 23.0,
+    "same": 31.92,
+    "out": 20.0,
+    "achv": 86.96,
+    "yoy": -37.34
+   }
+  ],
+  "quarters": [
+   {
+    "quarter": "Q1",
+    "task": 55.0,
+    "same": 4.09,
+    "out": 42.71,
+    "achv": 77.65,
+    "yoy": 944.88
+   },
+   {
+    "quarter": "Q2",
+    "task": 60.0,
+    "same": 58.28,
+    "out": 39.47,
+    "achv": 65.78,
+    "yoy": -32.28
+   }
+  ]
+ },
+ "managers": [
+  {
+   "name": "吴伟达",
+   "q1": {
+    "quarter": "Q1",
+    "task": 366.4,
+    "same": 390.4,
+    "out": 294.42,
+    "achv": 80.35,
+    "yoy": -24.58
+   },
+   "q2": {
+    "quarter": "Q2",
+    "task": 395.8,
+    "same": 392.83,
+    "out": 329.31,
+    "achv": 83.2,
+    "yoy": -16.17
+   },
+   "half": {
+    "task": 762.2,
+    "same": 783.23,
+    "out": 623.73,
+    "achv": 81.83,
+    "yoy": -20.36
+   },
+   "cum": 623.74
+  },
+  {
+   "name": "龙碧霞",
+   "q1": {
+    "quarter": "Q1",
+    "task": 21.0,
+    "same": 21.14,
+    "out": 6.0,
+    "achv": 28.57,
+    "yoy": -71.63
+   },
+   "q2": {
+    "quarter": "Q2",
+    "task": 39.0,
+    "same": 50.18,
+    "out": 35.22,
+    "achv": 90.3,
+    "yoy": -29.81
+   },
+   "half": {
+    "task": 60.0,
+    "same": 71.32,
+    "out": 41.22,
+    "achv": 68.7,
+    "yoy": -42.2
+   },
+   "cum": 41.21
+  }
+ ],
+ "channels": [
+  {
+   "name": "流通",
+   "v26": 311.71,
+   "v25": 461.38,
+   "share26": 44.64,
+   "yoy": -32.44
+  },
+  {
+   "name": "私域",
+   "v26": 175.61,
+   "v25": 147.33,
+   "share26": 25.15,
+   "yoy": 19.2
+  },
+  {
+   "name": "商超",
+   "v26": 167.74,
+   "v25": 218.67,
+   "share26": 24.02,
+   "yoy": -23.29
+  },
+  {
+   "name": "自采",
+   "v26": 29.04,
+   "v25": 16.92,
+   "share26": 4.16,
+   "yoy": 71.63
+  },
+  {
+   "name": "线上分销",
+   "v26": 10.83,
+   "v25": 38.99,
+   "share26": 1.55,
+   "yoy": -72.22
+  },
+  {
+   "name": "团购",
+   "v26": 3.33,
+   "v25": 0.0,
+   "share26": 0.48,
+   "yoy": null
+  }
+ ],
+ "private": [
+  {
+   "name": "柳州市春日网络科技有限公司",
+   "v26": 118.85,
+   "v25": 89.03,
+   "yoy": 33.49
+  },
+  {
+   "name": "广西柳州市螺大叔网络科技有限公司",
+   "v26": 56.77,
+   "v25": 58.31,
+   "yoy": -2.64
+  }
+ ],
+ "p328": {
+  "months": [
+   {
+    "month": 3,
+    "amt": 0.0,
+    "share": 0.0
+   },
+   {
+    "month": 4,
+    "amt": 0.1,
+    "share": 0.09
+   },
+   {
+    "month": 5,
+    "amt": 0.47,
+    "share": 0.52
+   },
+   {
+    "month": 6,
+    "amt": 0.2,
+    "share": 0.24
+   },
+   {
+    "month": 7,
+    "amt": 2.17,
+    "share": 1.82
+   },
+   {
+    "month": 8,
+    "amt": 2.42,
+    "share": 1.43
+   }
+  ],
+  "skus": [
+   {
+    "sku": "328g*6原味爆炒粉礼盒(线下)",
+    "qty": 640,
+    "amt": 3.46
+   },
+   {
+    "sku": "328g*24原味袋装爆炒粉",
+    "qty": 91,
+    "amt": 1.91
+   },
+   {
+    "sku": "328g原味袋装爆炒粉",
+    "qty": 2,
+    "amt": 0.0
+   }
+  ]
+ },
+ "products": {
+  "rows": [
+   {
+    "name": "330",
+    "v26": 432.35,
+    "v25": 639.43,
+    "share26": 61.92,
+    "yoy": -32.39
+   },
+   {
+    "name": "280+20",
+    "v26": 164.44,
+    "v25": 108.22,
+    "share26": 23.55,
+    "yoy": 51.95
+   },
+   {
+    "name": "210",
+    "v26": 50.67,
+    "v25": 60.43,
+    "share26": 7.26,
+    "yoy": -16.15
+   },
+   {
+    "name": "280",
+    "v26": 9.78,
+    "v25": 0.0,
+    "share26": 1.4,
+    "yoy": null
+   },
+   {
+    "name": "315",
+    "v26": 6.91,
+    "v25": 13.86,
+    "share26": 0.99,
+    "yoy": -50.14
+   },
+   {
+    "name": "400菌菇",
+    "v26": 5.69,
+    "v25": 17.28,
+    "share26": 0.81,
+    "yoy": -67.07
+   },
+   {
+    "name": "328爆炒",
+    "v26": 5.37,
+    "v25": 0.0,
+    "share26": 0.77,
+    "yoy": null
+   },
+   {
+    "name": "鸭脚煲",
+    "v26": 5.33,
+    "v25": 12.16,
+    "share26": 0.76,
+    "yoy": -56.17
+   },
+   {
+    "name": "城市礼盒",
+    "v26": 5.05,
+    "v25": 12.1,
+    "share26": 0.72,
+    "yoy": -58.26
+   },
+   {
+    "name": "200",
+    "v26": 2.88,
+    "v25": 6.24,
+    "share26": 0.41,
+    "yoy": -53.85
+   },
+   {
+    "name": "其他品项合计",
+    "v26": 9.78,
+    "v25": 13.57,
+    "share26": 1.4,
+    "yoy": -27.93,
+    "other": true
+   }
+  ],
+  "trend": [
+   {
+    "name": "330",
+    "months": [
+     {
+      "month": 3,
+      "v26": 69.76,
+      "v25": 96.14,
+      "yoy": -27.44
+     },
+     {
+      "month": 4,
+      "v26": 66.79,
+      "v25": 159.37,
+      "yoy": -58.09
+     },
+     {
+      "month": 5,
+      "v26": 59.5,
+      "v25": 77.57,
+      "yoy": -23.3
+     },
+     {
+      "month": 6,
+      "v26": 54.73,
+      "v25": 76.91,
+      "yoy": -28.84
+     },
+     {
+      "month": 7,
+      "v26": 76.33,
+      "v25": 93.56,
+      "yoy": -18.42
+     },
+     {
+      "month": 8,
+      "v26": 105.26,
+      "v25": 135.88,
+      "yoy": -22.53
+     }
+    ]
+   },
+   {
+    "name": "280+20",
+    "months": [
+     {
+      "month": 3,
+      "v26": 33.78,
+      "v25": 18.99,
+      "yoy": 77.88
+     },
+     {
+      "month": 4,
+      "v26": 25.19,
+      "v25": 7.1,
+      "yoy": 254.79
+     },
+     {
+      "month": 5,
+      "v26": 18.14,
+      "v25": 5.92,
+      "yoy": 206.42
+     },
+     {
+      "month": 6,
+      "v26": 18.71,
+      "v25": 13.87,
+      "yoy": 34.9
+     },
+     {
+      "month": 7,
+      "v26": 28.79,
+      "v25": 25.81,
+      "yoy": 11.55
+     },
+     {
+      "month": 8,
+      "v26": 39.83,
+      "v25": 36.53,
+      "yoy": 9.03
+     }
+    ]
+   },
+   {
+    "name": "210",
+    "months": [
+     {
+      "month": 3,
+      "v26": 6.66,
+      "v25": 9.68,
+      "yoy": -31.2
+     },
+     {
+      "month": 4,
+      "v26": 13.76,
+      "v25": 12.03,
+      "yoy": 14.38
+     },
+     {
+      "month": 5,
+      "v26": 7.01,
+      "v25": 8.73,
+      "yoy": -19.7
+     },
+     {
+      "month": 6,
+      "v26": 4.27,
+      "v25": 3.31,
+      "yoy": 29.0
+     },
+     {
+      "month": 7,
+      "v26": 6.09,
+      "v25": 9.57,
+      "yoy": -36.36
+     },
+     {
+      "month": 8,
+      "v26": 12.89,
+      "v25": 17.1,
+      "yoy": -24.62
+     }
+    ]
+   },
+   {
+    "name": "400菌菇",
+    "months": [
+     {
+      "month": 3,
+      "v26": 1.36,
+      "v25": 1.98,
+      "yoy": -31.31
+     },
+     {
+      "month": 4,
+      "v26": 1.49,
+      "v25": 7.75,
+      "yoy": -80.77
+     },
+     {
+      "month": 5,
+      "v26": 0.61,
+      "v25": 1.3,
+      "yoy": -53.08
+     },
+     {
+      "month": 6,
+      "v26": 0.77,
+      "v25": 2.9,
+      "yoy": -73.45
+     },
+     {
+      "month": 7,
+      "v26": 0.66,
+      "v25": 0.37,
+      "yoy": 78.38
+     },
+     {
+      "month": 8,
+      "v26": 0.8,
+      "v25": 2.99,
+      "yoy": -73.24
+     }
+    ]
+   },
+   {
+    "name": "315",
+    "months": [
+     {
+      "month": 3,
+      "v26": 1.19,
+      "v25": 2.2,
+      "yoy": -45.91
+     },
+     {
+      "month": 4,
+      "v26": 0.58,
+      "v25": 2.67,
+      "yoy": -78.28
+     },
+     {
+      "month": 5,
+      "v26": 1.15,
+      "v25": 2.65,
+      "yoy": -56.6
+     },
+     {
+      "month": 6,
+      "v26": 0.96,
+      "v25": 2.5,
+      "yoy": -61.6
+     },
+     {
+      "month": 7,
+      "v26": 1.77,
+      "v25": 1.79,
+      "yoy": -1.12
+     },
+     {
+      "month": 8,
+      "v26": 1.26,
+      "v25": 2.04,
+      "yoy": -38.24
+     }
+    ]
+   },
+   {
+    "name": "鸭脚煲",
+    "months": [
+     {
+      "month": 3,
+      "v26": 0.11,
+      "v25": 1.28,
+      "yoy": -91.41
+     },
+     {
+      "month": 4,
+      "v26": 1.17,
+      "v25": 3.5,
+      "yoy": -66.57
+     },
+     {
+      "month": 5,
+      "v26": 0.07,
+      "v25": 3.22,
+      "yoy": -97.83
+     },
+     {
+      "month": 6,
+      "v26": 1.11,
+      "v25": 0.63,
+      "yoy": 76.19
+     },
+     {
+      "month": 7,
+      "v26": 0.0,
+      "v25": 1.48,
+      "yoy": -100.0
+     },
+     {
+      "month": 8,
+      "v26": 2.87,
+      "v25": 2.06,
+      "yoy": 39.32
+     }
+    ]
+   }
+  ]
+ },
+ "salesmanTot": {
+  "吴伟达": 639.87,
+  "龙碧霞": 58.39
+ },
+ "customerRank": [
+  {
+   "name": "柳州市汪佳食品有限公司",
+   "v26": 161.7,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳州市吉彩商贸有限责任公司",
+   "v26": 135.85,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳州市春日网络科技有限公司",
+   "v26": 118.85,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳州市柳南区超利食品店",
+   "v26": 76.87,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西柳州市螺大叔网络科技有限公司",
+   "v26": 56.77,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西惠兴达供应链有限公司",
+   "v26": 21.2,
+   "salesman": "龙碧霞"
+  },
+  {
+   "name": "柳州市同喜贸易有限责任公司",
+   "v26": 17.32,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳州市后天商贸有限责任公司",
+   "v26": 17.27,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳州市壮品故香贸易有限公司",
+   "v26": 16.55,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "桂林市金羽食品有限公司",
+   "v26": 14.9,
+   "salesman": "龙碧霞"
+  },
+  {
+   "name": "梧州市长洲区丰豪商行",
+   "v26": 7.56,
+   "salesman": "龙碧霞"
+  },
+  {
+   "name": "广西贺州市长鑫贸易有限公司",
+   "v26": 7.22,
+   "salesman": "龙碧霞"
+  },
+  {
+   "name": "柳州科顿商贸有限公司",
+   "v26": 6.94,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳州市金桓商贸有限公司",
+   "v26": 6.53,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "河池市金钰商贸有限公司",
+   "v26": 5.7,
+   "salesman": "龙碧霞"
+  },
+  {
+   "name": "来宾市众勤商贸有限公司",
+   "v26": 4.01,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西柳州新美茶业有限公司",
+   "v26": 3.15,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西梧州市恒佳兆商贸有限公司",
+   "v26": 3.0,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西卓培贸易有限公司",
+   "v26": 2.93,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳州市柳北区聚香汇食品商行（个体工商户）",
+   "v26": 2.31,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳城县孔姐土特产商行",
+   "v26": 2.11,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西武宣双姐食品有限公司",
+   "v26": 1.36,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西凤野生态农业发展有限公司",
+   "v26": 1.26,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "三江哆耶土特食品商有限责任公司",
+   "v26": 1.24,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "中合三农（广西）商贸有限公司",
+   "v26": 1.2,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西唐熙超市有限责任公司",
+   "v26": 1.07,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西华星商贸有限公司",
+   "v26": 0.81,
+   "salesman": "龙碧霞"
+  },
+  {
+   "name": "柳州市柳北区好吃吖食品店",
+   "v26": 0.61,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "桂林飞鹿贸易有限公司",
+   "v26": 0.53,
+   "salesman": "龙碧霞"
+  },
+  {
+   "name": "柳州力源粮油有限责任公司",
+   "v26": 0.5,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳州市瑞鸿农业科技有限公司",
+   "v26": 0.4,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "广西礼纳贸易有限公司",
+   "v26": 0.29,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "来宾市兴宾区甜客家超市",
+   "v26": 0.17,
+   "salesman": "吴伟达"
+  },
+  {
+   "name": "柳州诺邦贸易有限公司",
+   "v26": 0.07,
+   "salesman": "吴伟达"
+  }
+ ],
+ "managerTrend": [
+  {
+   "name": "吴伟达",
+   "months": [
+    {
+     "period": "2603",
+     "month": 3,
+     "task": 122.8,
+     "same": 119.78,
+     "out": 116.56,
+     "achv": 94.92,
+     "yoy": -2.69
+    },
+    {
+     "period": "2604",
+     "month": 4,
+     "task": 158.8,
+     "same": 182.47,
+     "out": 100.41,
+     "achv": 63.23,
+     "yoy": -44.97
+    },
+    {
+     "period": "2605",
+     "month": 5,
+     "task": 84.8,
+     "same": 88.15,
+     "out": 77.45,
+     "achv": 91.33,
+     "yoy": -12.14
+    },
+    {
+     "period": "2606",
+     "month": 6,
+     "task": 84.8,
+     "same": 94.58,
+     "out": 70.67,
+     "achv": 83.34,
+     "yoy": -25.28
+    },
+    {
+     "period": "2607",
+     "month": 7,
+     "task": 126.0,
+     "same": 119.1,
+     "out": 99.27,
+     "achv": 78.78,
+     "yoy": -16.66
+    },
+    {
+     "period": "2608",
+     "month": 8,
+     "task": 185.0,
+     "same": 179.14,
+     "out": 159.38,
+     "achv": 86.15,
+     "yoy": -11.03
+    }
+   ]
+  },
+  {
+   "name": "龙碧霞",
+   "months": [
+    {
+     "period": "2603",
+     "month": 3,
+     "task": 0.0,
+     "same": 8.06,
+     "out": 0.0,
+     "achv": null,
+     "yoy": -100.0
+    },
+    {
+     "period": "2604",
+     "month": 4,
+     "task": 12.0,
+     "same": 7.91,
+     "out": 1.76,
+     "achv": 14.66,
+     "yoy": -77.77
+    },
+    {
+     "period": "2605",
+     "month": 5,
+     "task": 9.0,
+     "same": 5.17,
+     "out": 4.24,
+     "achv": 47.11,
+     "yoy": -17.94
+    },
+    {
+     "period": "2606",
+     "month": 6,
+     "task": 10.0,
+     "same": 7.16,
+     "out": 4.83,
+     "achv": 48.35,
+     "yoy": -32.43
+    },
+    {
+     "period": "2607",
+     "month": 7,
+     "task": 14.0,
+     "same": 21.2,
+     "out": 20.38,
+     "achv": 145.57,
+     "yoy": -3.85
+    },
+    {
+     "period": "2608",
+     "month": 8,
+     "task": 15.0,
+     "same": 21.83,
+     "out": 10.0,
+     "achv": 66.69,
+     "yoy": -54.17
+    }
+   ]
+  }
+ ],
+ "customers": {
+  "decliners": [
+   {
+    "name": "柳州市汪佳食品有限公司",
+    "v25": 238.37,
+    "v26": 161.7,
+    "yoy": -32.16,
+    "loss": 76.67
+   },
+   {
+    "name": "柳州市柳南区超利食品店",
+    "v25": 140.55,
+    "v26": 76.87,
+    "yoy": -45.31,
+    "loss": 63.68
+   },
+   {
+    "name": "柳州市柳南区柳哲百货商行",
+    "v25": 35.73,
+    "v26": 0.0,
+    "yoy": -100.0,
+    "loss": 35.73
+   },
+   {
+    "name": "柳州市吉彩商贸有限责任公司",
+    "v25": 162.14,
+    "v26": 135.85,
+    "yoy": -16.21,
+    "loss": 26.29
+   },
+   {
+    "name": "桂林市金羽食品有限公司",
+    "v25": 32.37,
+    "v26": 14.9,
+    "yoy": -53.98,
+    "loss": 17.48
+   },
+   {
+    "name": "柳州市永浦生物科技有限公司",
+    "v25": 15.33,
+    "v26": 0.0,
+    "yoy": -100.0,
+    "loss": 15.33
+   },
+   {
+    "name": "柳州螺王食品有限公司",
+    "v25": 11.03,
+    "v26": 0.0,
+    "yoy": -100.0,
+    "loss": 11.03
+   },
+   {
+    "name": "柳州市茅特贸易有限公司",
+    "v25": 5.98,
+    "v26": 0.0,
+    "yoy": -100.0,
+    "loss": 5.98
+   },
+   {
+    "name": "广西唐熙超市有限责任公司",
+    "v25": 6.86,
+    "v26": 1.07,
+    "yoy": -84.38,
+    "loss": 5.79
+   },
+   {
+    "name": "柳州市壮品故香贸易有限公司",
+    "v25": 20.81,
+    "v26": 16.55,
+    "yoy": -20.46,
+    "loss": 4.26
+   },
+   {
+    "name": "广西柳州新美茶业有限公司",
+    "v25": 6.87,
+    "v26": 3.15,
+    "yoy": -54.14,
+    "loss": 3.72
+   },
+   {
+    "name": "柳州市柳南区乘六杯食品经营部",
+    "v25": 3.4,
+    "v26": 0.0,
+    "yoy": -100.0,
+    "loss": 3.4
+   }
+  ],
+  "gainers": [
+   {
+    "name": "柳州市春日网络科技有限公司",
+    "v25": 89.03,
+    "v26": 118.85,
+    "yoy": 33.5,
+    "loss": -29.82
+   },
+   {
+    "name": "柳州市后天商贸有限责任公司",
+    "v25": 0.0,
+    "v26": 17.27,
+    "yoy": null,
+    "loss": -17.27
+   },
+   {
+    "name": "柳州市同喜贸易有限责任公司",
+    "v25": 1.97,
+    "v26": 17.32,
+    "yoy": 778.1,
+    "loss": -15.35
+   },
+   {
+    "name": "柳州市金桓商贸有限公司",
+    "v25": 0.0,
+    "v26": 6.53,
+    "yoy": null,
+    "loss": -6.53
+   },
+   {
+    "name": "柳州科顿商贸有限公司",
+    "v25": 1.83,
+    "v26": 6.94,
+    "yoy": 278.69,
+    "loss": -5.11
+   },
+   {
+    "name": "广西惠兴达供应链有限公司",
+    "v25": 16.09,
+    "v26": 21.2,
+    "yoy": 31.75,
+    "loss": -5.11
+   }
+  ],
+  "jinyu": {
+   "months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "y25": [
+    5.24,
+    6.08,
+    1.85,
+    3.37,
+    11.51,
+    4.32
+   ],
+   "y26": [
+    5.92,
+    0.0,
+    1.55,
+    2.26,
+    4.62,
+    0.55
+   ],
+   "total26": 14.9,
+   "total25": 32.37,
+   "yoy": -53.97
+  },
+  "count26": 34,
+  "count25": 28
+ },
+ "check": {
+  "guibei_detail_total": 698.26,
+  "guibei_summary_cum": 698.26,
+  "direct_summary_cum": 82.18,
+  "guibei_fy25_detail_total": 883.29,
+  "guibei_q1q2_same_summary": 883.29
+ }
+};
+
+</script>
+<script>
+(function(){
+  var D = window.BOARD_DATA;
+  if(!D){document.body.insertAdjacentHTML('afterbegin','<div style="background:#ffece8;color:#d91f1f;padding:12px 20px">看板数据缺失：请确认 data.js 与本页面在同一文件夹。</div>');return;}
+
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function fw(v,d){d=d==null?2:d;if(v==null||isNaN(v))return '—';return Number(v).toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d});}
+  function fw0(v){return v==null?'—':Number(v).toLocaleString('zh-CN',{maximumFractionDigits:0});}
+  function pct(v,d){d=d==null?2:d;if(v==null||isNaN(v))return '<span class="dim">—</span>';var s=Math.abs(v).toFixed(d)+'%';var c=v>0?'up':(v<0?'down':'');if(v>0)s='+'+s;if(v<0)s='-'+s;return '<b class="'+c+'">'+s+'</b>';}
+  function pctPlain(v,d){d=d==null?2:d;if(v==null||isNaN(v))return '—';var s=Math.abs(v).toFixed(d)+'%';if(v>0)s='+'+s;if(v<0)s='-'+s;return s;}
+  function pctTxt(v,d){d=d==null?2:d;if(v==null||isNaN(v))return '—';var s=(v>0?'+':'')+v.toFixed(d)+'%';return s;}
+
+  var C = {blue:'#3370ff',gray:'#c9cdd4',red:'#f53f3f',green:'#00b42a',purple:'#722ed1',orange:'#ff7d00',teal:'#14c9c9'};
+
+  function niceStep(max){
+    var step;
+    if(max<=5) step=1;
+    else if(max<=25) step=5;
+    else if(max<=50) step=10;
+    else if(max<=200) step=50;
+    else if(max<=600) step=100;
+    else step=200;
+    while(max/step>6){step*=2;}
+    return step;
+  }
+  function svgBars(el, groups, legend, opts){
+    opts=opts||{};
+    var W=opts.width||1080,H=opts.height||360,padL=opts.padL||64,padR=20,padT=opts.padT||56,padB=52;
+    var maxRaw=0;
+    groups.forEach(function(g){g.bars.forEach(function(b){if(b.v>maxRaw)maxRaw=b.v;});});
+    var step=niceStep(maxRaw||1);
+    var niceMax=Math.ceil((maxRaw||1)/step)*step;
+    var iw=W-padL-padR, ih=H-padT-padB;
+    function y(v){return padT+ih-(v/niceMax)*ih;}
+    var ticks=Math.round(niceMax/step);
+    var s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+    for(var i=0;i<=ticks;i++){
+      var vv=niceMax/ticks*i, yy=y(vv);
+      s+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" stroke="#eef0f3" stroke-width="1"/>';
+      s+='<text x="'+(padL-10)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11" fill="#86909c">'+fw0(vv)+'</text>';
+    }
+    var slot=iw/groups.length;
+    groups.forEach(function(g,gi){
+      var n=g.bars.length;
+      var barW=Math.min(46,slot*0.5/(n));
+      var totalW=n*barW+(n-1)*8;
+      var cx=padL+slot*gi+slot/2;
+      var x0=cx-totalW/2;
+      if(g.note && g.note.text!==null && g.note.text!==undefined){
+        var nc=g.note.cls==='down'?'#f53f3f':(g.note.cls==='up'?'#00b42a':'#86909c');
+        s+='<text x="'+cx+'" y="'+(padT-16)+'" text-anchor="middle" font-size="13" font-weight="700" fill="'+nc+'">'+esc(g.note.text)+'</text>';
+      }
+      g.bars.forEach(function(b,bi){
+        var bw=Math.max(4,barW), bx=x0+bi*(barW+8);
+        var bh=y(0)-y(b.v);
+        if(b.v>0){
+          s+='<rect x="'+bx+'" y="'+y(b.v)+'" width="'+bw+'" height="'+Math.max(1,bh)+'" rx="3" fill="'+(b.c||C.blue)+'"/>';
+          var labY=y(b.v)-7;
+          s+='<text x="'+(bx+bw/2)+'" y="'+labY+'" text-anchor="middle" font-size="11" font-weight="600" fill="#4e5969">'+fw(b.v,opts.barDecimals==null?1:opts.barDecimals)+'</text>';
+        }
+      });
+      s+='<text x="'+cx+'" y="'+(H-22)+'" text-anchor="middle" font-size="12" fill="#4e5969">'+esc(g.label)+'</text>';
+    });
+    s+='<text x="'+(W-8)+'" y="'+(H-4)+'" text-anchor="end" font-size="11" fill="#86909c">单位：万元</text>';
+    s+='</svg>';
+    el.innerHTML=s;
+  }
+  function svgLines(el, series, labels, opts){
+    opts=opts||{};
+    var W=opts.width||1080,H=opts.height||330,padL=opts.padL||58,padR=opts.padR||190,padT=30,padB=46;
+    var iw=W-padL-padR, ih=H-padT-padB;
+    var vals=[];
+    series.forEach(function(sr){sr.points.forEach(function(p){if(p!=null&&!isNaN(p))vals.push(p);});});
+    if(!vals.length)vals.push(0);
+    var lo=Math.min(0,Math.min.apply(null,vals));
+    var hi=Math.max(0,Math.max.apply(null,vals));
+    lo=Math.floor((lo-40)/50)*50;
+    hi=Math.ceil((hi+40)/50)*50;
+    if(hi-lo<150){var mid=(hi+lo)/2;lo=mid-75;hi=mid+75;}
+    function y(v){return padT+(hi-v)/(hi-lo)*ih;}
+    function x(i){return labels.length>1?padL+iw*i/(labels.length-1):padL;}
+    var s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+    for(var gv=lo;gv<=hi+0.1;gv+=50){
+      var gy=y(gv);
+      s+='<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="#eef0f3" stroke-width="1"/>';
+      s+='<text x="'+(padL-10)+'" y="'+(gy+4)+'" text-anchor="end" font-size="11" fill="#86909c">'+(gv>0?'+':'')+gv+'%</text>';
+    }
+    var zy=y(0);
+    s+='<line x1="'+padL+'" y1="'+zy+'" x2="'+(W-padR)+'" y2="'+zy+'" stroke="#c9cdd4" stroke-width="1.6"/>';
+    labels.forEach(function(lb,i){
+      s+='<text x="'+x(i)+'" y="'+(H-16)+'" text-anchor="middle" font-size="12" fill="#4e5969">'+esc(lb)+'</text>';
+    });
+    series.forEach(function(sr){
+      var c=sr.color||C.blue;
+      var seg='',started=false,lastPt=null;
+      sr.points.forEach(function(p,i){
+        if(p!=null&&!isNaN(p)){
+          var px=x(i),py=y(p);
+          if(!started){seg+='M'+px+','+py;started=true;}
+          else{seg+='L'+px+','+py;}
+          s+='<circle cx="'+px+'" cy="'+py+'" r="3.2" fill="#fff" stroke="'+c+'" stroke-width="2"/>';
+          lastPt={x:px,y:py,v:p};
+        }else if(started){
+          s+='<path d="'+seg+'" fill="none" stroke="'+c+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+          seg='';started=false;
+        }
+      });
+      if(started){
+        s+='<path d="'+seg+'" fill="none" stroke="'+c+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+      }
+      if(lastPt){
+        s+='<text x="'+(lastPt.x+8)+'" y="'+(lastPt.y+4)+'" font-size="12" font-weight="600" fill="'+c+'">'+esc(sr.name)+' '+pctTxt(lastPt.v)+'</text>';
+      }
+    });
+    s+='<text x="'+(padL-10)+'" y="14" font-size="11" fill="#86909c">同比%</text>';
+    s+='</svg>';
+    el.innerHTML=s;
+  }
+  function legendHtml(legend){
+    var h='<div class="legend">';
+    legend.forEach(function(l){h+='<span><i style="background:'+l.c+'"></i>'+esc(l.label)+'</span>';});
+    h+='</div>';
+    return h;
+  }
+
+  /* ---------- 元信息 ---------- */
+  document.getElementById('pageSub').textContent = D.meta.subtitle;
+  var chips='';
+  chips+='<span class="meta-chip">数据截止 '+esc(D.meta.cutoff)+'</span>';
+  chips+='<span class="meta-chip">出库金额口径：价税合计（折前）</span>';
+  chips+='<span class="meta-chip">生成 '+esc(D.meta.builtAt)+' · 数字与汇总表核对一致</span>';
+  chips+='<span class="meta-chip">离线网页 · 即开即用</span>';
+  document.getElementById('metaChips').innerHTML=chips;
+
+  /* ---------- AI 摘要 ---------- */
+  var gk=D.guibei.kpi, dk=D.direct.kpi;
+  var qs0=D.guibei.quarters[0], qs1=D.guibei.quarters[1];
+  var priv=D.channels.filter(function(c){return c.name==='私域';})[0];
+  var ai = '<div class="ai"><span class="lab">一句话结论</span>'+
+    '桂北 3-8月累计出库 <b>'+fw(gk.q1q2_out)+' 万元</b>，同比 <b class="down">'+pctPlain(gk.q1q2_yoy)+'</b>；'+
+    'Q2 环比 <b class="up">+'+fw(gk.qoq)+'%</b> 回升，但 Q1、Q2 同比仍分别 '+pctPlain(qs0.yoy)+'、'+pctPlain(qs1.yoy)+'。'+
+    '缺口主要来自汪佳、超利、柳哲、吉彩、金羽等大客户收缩（前5合计约 -219.9 万），'+
+    '私域（春日 +33.5% / 螺大叔）逆势增长、卓培等新客户进场，部分对冲；'+
+    '直营 3-4月新开无同期，5-8月同比 -15.9%；328 新品 8月占比 1.43%（两位小数）。</div>';
+  document.getElementById('aiLine').innerHTML=ai;
+
+  /* ---------- KPI ---------- */
+  function kpi(scope,label,val,unit,subHtml,hl){
+    return '<div class="kpi'+(hl?' hl':'')+'"><div class="scope">'+scope+'</div><div class="label">'+label+'</div>'+
+      '<div class="val">'+val+(unit?'<small>'+unit+'</small>':'')+'</div>'+(subHtml?'<div class="sub">'+subHtml+'</div>':'')+'</div>';
+  }
+  var box='';
+  box+=kpi('桂北区域','财年总任务',fw0(gk.task),'万','全年任务，截至8月已完成 '+fw(gk.achv)+'%');
+  box+=kpi('桂北区域','累计出库（3-8月）',fw(gk.q1q2_out),'万','上年同期 '+fw(gk.q1q2_same)+' 万 · 同比 <b class="down">'+pctPlain(gk.q1q2_yoy)+'</b>');
+  box+=kpi('桂北区域','季度环比',pctTxt(gk.qoq).replace('+',''),'%','Q1 '+fw(D.guibei.quarters[0].out)+' 万 → Q2 '+fw(D.guibei.quarters[1].out)+' 万','hl');
+  box+=kpi('直营区域','累计出库（3-8月）',fw(dk.out),'万','财年任务 '+fw0(dk.task)+' 万 · 达成 '+fw(dk.achv)+'%');
+  box+=kpi('直营区域','5-8月同比',pctPlain(dk.since5_yoy),'','3、4月新开无同期；5-8月 '+fw(dk.since5_out)+' 万 vs '+fw(dk.since5_same)+' 万','hl');
+  var privVal=priv?priv.v26:0, privShare=priv?priv.share26:0;
+  box+=kpi('渠道','私域（春日+螺大叔）',fw(privVal),'万','占比 '+fw(privShare)+'% · 同比 <b class="up">'+pctPlain(priv?priv.yoy:null)+'</b>');
+  document.getElementById('kpiBox').innerHTML=box;
+
+  /* ---------- 月度对比 ---------- */
+  var mg=D.guibei.months;
+  var gps=mg.map(function(m){
+    var yoy=m.yoy;
+    return {label:m.month+'月',bars:[{v:m.out,c:C.blue},{v:m.same,c:C.gray}],
+      note:{text:yoy==null?'—':pctTxt(yoy),cls:yoy<0?'down':'up'}};
+  });
+  document.getElementById('monthLegend').innerHTML=legendHtml([{c:C.blue,label:'2026年出库'},{c:C.gray,label:'2025年同期'}]);
+  svgBars(document.getElementById('monthChart'),gps);
+  var th='<tr><th>期间</th><th>财年任务(万)</th><th>出库金额(万)</th><th>上年同期(万)</th><th>任务达成</th><th>同比</th></tr>';
+  var trs='';
+  mg.forEach(function(m){
+    trs+='<tr><td>'+m.month+'月</td><td>'+fw(m.task)+'</td><td>'+fw(m.out)+'</td><td>'+fw(m.same)+'</td>'+
+      '<td>'+(m.achv==null?'—':fw(m.achv)+'%')+'</td><td>'+pct(m.yoy)+'</td></tr>';
+  });
+  document.getElementById('monthTbl').innerHTML=th+trs;
+
+  /* ---------- 季度同屏 ---------- */
+  var qs=D.guibei.quarters;
+  var qgps=qs.map(function(q){
+    return {label:q.quarter,bars:[{v:q.out,c:C.blue},{v:q.same,c:C.gray}],
+      note:{text:q.yoy==null?'—':pctTxt(q.yoy),cls:q.yoy<0?'down':'up'}};
+  });
+  document.getElementById('qLegend').innerHTML=legendHtml([{c:C.blue,label:'2026年出库'},{c:C.gray,label:'2025年同期'},{c:'#333',label:'柱上方=同比'}]);
+  svgBars(document.getElementById('qChart'),qgps,{barDecimals:2});
+  var qnote='<span>2026年 Q1→Q2 环比 <b class="'+(gk.qoq>0?'up':'down')+'">'+pctTxt(gk.qoq)+'</b></span>';
+  var q25qoq=Math.round((qs[1].out-qs[0].out)/qs[0].out*10000)/100;
+  qnote+='<span>2025年同期 Q1→Q2 环比 <b class="'+(q25qoq>0?'up':'down')+'">'+pctTxt(q25qoq)+'</b></span>';
+  qnote+='<span>3-8月整体同比 <b class="down">'+pctPlain(gk.q1q2_yoy)+'</b>（'+fw(gk.q1q2_out)+' / '+fw(gk.q1q2_same)+' 万）</span>';
+  document.getElementById('qNote').innerHTML=qnote;
+  var qth='<tr><th>季度</th><th>财年任务(万)</th><th>出库金额(万)</th><th>上年同期(万)</th><th>任务达成</th><th>同比</th><th>环比</th></tr>';
+  var qtrs='';
+  qs.forEach(function(q,i){
+    qtrs+='<tr><td>'+q.quarter+'（'+(i===0?'3-5月':'6-8月')+'）</td><td>'+fw(q.task)+'</td><td>'+fw(q.out)+'</td><td>'+fw(q.same)+'</td>'+
+      '<td>'+(q.achv==null?'—':fw(q.achv)+'%')+'</td><td>'+pct(q.yoy)+'</td><td>'+(i===0?'—':pct((q.out-qs[0].out)/qs[0].out))+'</td></tr>';
+  });
+  qtrs+='<tr class="sum"><td>合计</td><td>'+fw(qs[0].task+qs[1].task)+'</td><td>'+fw(gk.q1q2_out)+'</td><td>'+fw(gk.q1q2_same)+'</td><td>'+fw(gk.achv)+'%</td><td>'+pct(gk.q1q2_yoy)+'</td><td>—</td></tr>';
+  document.getElementById('qTbl').innerHTML=qth+qtrs;
+
+  /* ---------- 直营 ---------- */
+  var dm=D.direct.months;
+  var dgps=dm.map(function(m){
+    var bars=[{v:m.out,c:C.blue}];
+    if(!m.isNew && m.same>0){bars.push({v:m.same,c:C.gray});}
+    var noteTxt,noteCls;
+    if(m.isNew){noteTxt='新开';noteCls='gray';}
+    else{noteTxt=pctTxt(m.yoy);noteCls=m.yoy<0?'down':'up';}
+    return {label:m.month+'月',bars:bars,note:{text:noteTxt,cls:noteCls}};
+  });
+  document.getElementById('dLegend').innerHTML=legendHtml([{c:C.blue,label:'2026年出库'},{c:C.gray,label:'2025年同期(5月起)'}]);
+  svgBars(document.getElementById('dChart'),dgps,{barDecimals:2});
+  var dth='<tr><th>期间</th><th>财年任务(万)</th><th>出库金额(万)</th><th>上年同期(万)</th><th>任务达成</th><th>同比</th></tr>';
+  var dtrs='';
+  dm.forEach(function(m){
+    dtrs+='<tr><td>'+m.month+'月'+(m.isNew?'<span class="badge gray">新开</span>':'')+'</td><td>'+fw(m.task)+'</td><td>'+fw(m.out)+'</td><td>'+
+      (m.isNew?'<span class="dim">无同期</span>':fw(m.same))+'</td><td>'+(m.achv==null?'—':fw(m.achv)+'%')+'</td><td>'+(m.isNew?'<span class="dim">—</span>':pct(m.yoy))+'</td></tr>';
+  });
+  document.getElementById('dTbl').innerHTML=dth+dtrs;
+
+  /* ---------- 渠道 ---------- */
+  var chs=D.channels;
+  var tot26=chs.reduce(function(a,c){return a+c.v26;},0);
+  var colors={流通:C.blue,私域:C.purple,商超:C.green,自采:C.orange,线上分销:'#f77234',团购:'#f7ba1e'};
+  var stack='<div class="stack">';
+  chs.forEach(function(c){
+    var w=c.v26/tot26*100;
+    stack+='<div style="width:'+w+'%;background:'+(colors[c.name]||'#86909c')+'" class="'+(w<6?'thin':'')+'">'+
+      (w>6?esc(c.name)+' '+fw(c.share26)+'%':'')+'</div>';
+  });
+  stack+='</div>';
+  document.getElementById('channelStack').innerHTML=stack;
+  var lg='<span class="chips">';
+  chs.forEach(function(c){lg+='<span><i style="background:'+(colors[c.name]||'#86909c')+';display:inline-block;width:8px;height:8px;border-radius:2px"></i>'+esc(c.name)+' '+fw(c.share26)+'%</span>';});
+  lg+='</span>';
+  document.getElementById('chLegend').innerHTML=lg;
+  var cth='<tr><th>渠道</th><th>26年3-8月(万)</th><th>占比</th><th>25年同期(万)</th><th>同比</th><th>变动(万)</th></tr>';
+  var ctrs='';
+  chs.forEach(function(c){
+    ctrs+='<tr><td>'+esc(c.name)+'</td><td>'+fw(c.v26)+'</td><td>'+fw(c.share26)+'%</td><td>'+fw(c.v25)+'</td><td>'+pct(c.yoy)+'</td><td>'+(c.yoy==null?'<span class="dim">新增</span>':fw(c.v26-c.v25))+'</td></tr>';
+  });
+  document.getElementById('chTbl').innerHTML=cth+ctrs;
+  var pv=D.private;
+  var pnote='私域合计 '+fw(chs.filter(function(c){return c.name==='私域';})[0].v26)+' 万：';
+  pv.forEach(function(p,i){
+    pnote+=(i>0?'；':'')+esc(p.name.replace('柳州市','').replace('广西','').replace('网络科技有限公司',''))+' '+fw(p.v26)+' 万（同比 '+pctTxt(p.yoy)+'）';
+  });
+  pnote+='。';
+  document.getElementById('chNote').innerHTML=pnote;
+
+  /* ---------- 328 ---------- */
+  var p328=D.p328.months;
+  var pgps=p328.filter(function(m){return m.amt>0;}).map(function(m){
+    return {label:m.month+'月',bars:[{v:m.amt,c:C.purple}],note:{text:fw(m.share,2)+'%',cls:'gray'}};
+  });
+  svgBars(document.getElementById('p328Chart'),pgps,{barDecimals:2,height:300,padT:48});
+  var pth='<tr><th>月份</th><th>328金额(万)</th><th>当月总出库(万)</th><th>占比(两位小数)</th></tr>';
+  var ptrs='';
+  p328.forEach(function(m){
+    var tot=mg[m.month-3]?mg[m.month-3].out:null;
+    ptrs+='<tr class="'+(m.month===5||m.month===8?'hl':'')+'"><td>'+(m.month===5||m.month===8?'<b>'+m.month+'月（核对）</b>':m.month+'月')+'</td><td>'+fw(m.amt)+'</td><td>'+fw(tot)+'</td><td><b>'+fw(m.share,2)+'%</b></td></tr>';
+  });
+  document.getElementById('p328Tbl').innerHTML=pth+ptrs;
+  var skuHtml='<div style="margin-top:8px;font-weight:700;font-size:13px">328 品项构成（3-8月累计）</div><div class="tbl-wrap"><table class="tbl"><tr><th>品项明细</th><th>数量</th><th>金额(万)</th></tr>';
+  D.p328.skus.forEach(function(s){skuHtml+='<tr><td>'+esc(s.sku)+'</td><td>'+fw0(s.qty)+' 件</td><td>'+fw(s.amt)+'</td></tr>';});
+  skuHtml+='</table></div>';
+  document.getElementById('p328Note').innerHTML=skuHtml+'<div style="margin-top:6px"><b>9月起：</b>新品（328等）按独立明细表更新维护，本模块表格结构已预留。</div>';
+
+  /* ---------- 品项占比与同期比趋势 ---------- */
+  var prod=D.products;
+  var catPalette=['#3370ff','#00b42a','#ff7d00','#722ed1','#14c9c9','#f77234','#f7ba1e','#eb0aa4','#1d2129','#a9aeb8'];
+  var catColor={}, maxSh=0;
+  prod.rows.forEach(function(r,i){
+    if(!r.other)maxSh=Math.max(maxSh,r.share26);
+    catColor[r.name]=r.other?'#a9aeb8':catPalette[i%catPalette.length];
+  });
+  var shHtml='';
+  prod.rows.forEach(function(r){
+    var w=Math.max(2,r.share26/maxSh*100);
+    shHtml+='<div class="hb"><div class="hb-top"><span class="hb-name" style="color:'+catColor[r.name]+'">'+esc(r.name)+'</span>'+
+      '<span class="hb-v">'+fw(r.v26)+' 万 · '+fw(r.share26)+'%</span></div>'+
+      '<div class="hb-bar"><div style="width:'+w+'%;background:'+catColor[r.name]+'"></div></div></div>';
+  });
+  document.getElementById('catShare').innerHTML=shHtml;
+  var cath='<tr><th>品项类别</th><th>26年3-8月(万)</th><th>占比</th><th>25年同期(万)</th><th>同比</th><th>增减(万)</th></tr>';
+  var catrs='';
+  prod.rows.forEach(function(r){
+    catrs+='<tr'+(r.other?' class="sum"':'')+'><td style="color:'+catColor[r.name]+';font-weight:'+(r.other?'700':'600')+'">'+esc(r.name)+'</td>'+
+      '<td>'+fw(r.v26)+'</td><td>'+fw(r.share26)+'%</td><td>'+fw(r.v25)+'</td><td>'+pct(r.yoy)+'</td>'+
+      '<td>'+(r.yoy==null?'<span class="dim">新增</span>':fw(r.v26-r.v25))+'</td></tr>';
+  });
+  document.getElementById('catTbl').innerHTML=cath+catrs;
+  var leg=[];
+  prod.trend.forEach(function(t){
+    var row=prod.rows.filter(function(r){return r.name===t.name;})[0];
+    leg.push({c:catColor[t.name],label:t.name+' 3-8月同比 '+(row?pctPlain(row.yoy):'—')});
+  });
+  document.getElementById('catLegend').innerHTML=legendHtml(leg);
+  var tSeries=prod.trend.map(function(t){
+    return {name:t.name,color:catColor[t.name],points:t.months.map(function(m){return m.yoy;})};
+  });
+  svgLines(document.getElementById('catTrendChart'),tSeries,['3月','4月','5月','6月','7月','8月']);
+  var tth='<tr><th>品项</th><th>3月</th><th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>8月</th><th>3-8月</th></tr>';
+  var ttrs='';
+  prod.trend.forEach(function(t){
+    var row=prod.rows.filter(function(r){return r.name===t.name;})[0];
+    ttrs+='<tr><td style="color:'+catColor[t.name]+';font-weight:600">'+esc(t.name)+'</td>';
+    t.months.forEach(function(m){ttrs+='<td>'+pct(m.yoy)+'</td>';});
+    ttrs+='<td>'+pct(row?row.yoy:null)+'</td></tr>';
+  });
+  document.getElementById('catTrendTbl').innerHTML=tth+ttrs;
+  var z28=prod.trend.filter(function(t){return t.name==='280+20';})[0];
+  var znote='<b>看线提醒：</b>上年同月金额为0的月份不做同比（点断开）；328爆炒、280礼盒等为今年新品，无上年同期，占比见左侧、不进同比线。';
+  znote+='<br><b>结构性结论：</b>330（原味礼盒系）3-8月同比 '+pctPlain(prod.rows.filter(function(r){return r.name==='330';})[0].yoy)+'，是总量下滑主因；';
+  if(z28)znote+='280+20 靠去年低基数高增，8月同比已回落到 '+pctPlain(z28.months[5].yoy)+'。';
+  document.getElementById('catNote').innerHTML=znote;
+
+  /* ---------- 客户跌幅 ---------- */
+  var dec=D.customers.decliners;
+  var dth2='<tr><th>#</th><th>客户</th><th>26年3-8月(万)</th><th>25年同期(万)</th><th>同比</th><th>减少(万)</th></tr>';
+  var dtrs2='';
+  dec.forEach(function(c,i){
+    var hl=c.name.indexOf('金羽')>=0;
+    var zero=c.v26<=0;
+    dtrs2+='<tr class="'+(hl?'hl':'')+'"><td>'+ (i+1)+'</td><td>'+esc(c.name)+(zero?'<span class="badge red">流失</span>':'')+'</td>'+
+      '<td>'+fw(c.v26)+'</td><td>'+fw(c.v25)+'</td><td>'+pct(c.yoy)+'</td><td class="down">-'+fw(c.loss)+'</td></tr>';
+  });
+  document.getElementById('declTbl').innerHTML=dth2+dtrs2;
+  var decNote='前5大收缩客户（汪佳/超利/柳哲/吉彩/金羽）合计减少约 219.9 万，是整体缺口（185 万）的主要来源；'+
+    '同期春日 +33.5%、卓培、金桓、后天等新增/增长客户部分对冲。';
+  document.getElementById('declNote').innerHTML=decNote;
+  var jy=D.customers.jinyu;
+  var jgps=jy.months.map(function(m,i){
+    var y25=jy.y25[i],y26=jy.y26[i];
+    var yoy=(y25>0)?(y26-y25)/y25*100:null;
+    return {label:m+'月',bars:[{v:y26,c:C.blue},{v:y25,c:C.gray}],
+      note:{text:yoy==null?'—':pctTxt(Math.round(yoy*100)/100),cls:yoy<0?'down':'up'}};
+  });
+  svgBars(document.getElementById('jyChart'),jgps,{barDecimals:2});
+
+  /* ---------- 客户销售排行（切片器） ---------- */
+  var custRankRows=D.customerRank;
+  var salesmanNames=Object.keys(D.salesmanTot);
+  function renderCustRank(sel){
+    var rows=sel==='全部'?custRankRows:custRankRows.filter(function(c){return c.salesman===sel;});
+    var top=rows.slice(0,10);
+    var maxV=top.length?top[0].v26:0;
+    var totalSel=rows.reduce(function(a,c){return a+c.v26;},0);
+    var h='';
+    top.forEach(function(c,i){
+      var w=maxV?Math.max(2,c.v26/maxV*100):0;
+      var no=i===0?'t':(i===1?'t2':(i===2?'t3':''));
+      h+='<div class="rank-row"><span class="rank-no '+no+'">'+(i+1)+'</span>'+
+        '<span class="rank-name" title="'+esc(c.name)+'">'+esc(c.name)+'</span>'+
+        '<span class="rank-track"><div style="width:'+w+'%"></div></span>'+
+        '<span class="rank-val"><b>'+fw(c.v26)+'</b> 万 · '+fw(totalSel?c.v26/totalSel*100:0,1)+'%</span></div>';
+    });
+    document.getElementById('custRankBars').innerHTML=h;
+    var note='当前范围：<b>'+(sel==='全部'?'全部销售经理':sel)+'</b> · 客户 '+rows.length+' 家 · 合计 <b>'+fw(totalSel)+' 万</b>。';
+    if(sel!=='全部')note+='（另可切回“全部”看整体TOP10）';
+    document.getElementById('custRankNote').innerHTML=note;
+    var bs=document.getElementById('custSlicer').querySelectorAll('button');
+    bs.forEach(function(b){b.className=b.dataset.m===sel?'on':'';});
+  }
+  (function buildSlicer(){
+    var h='<button class="on" data-m="全部">全部销售经理</button>';
+    salesmanNames.forEach(function(n){h+='<button data-m="'+esc(n)+'">'+esc(n)+'</button>';});
+    document.getElementById('custSlicer').innerHTML=h;
+    document.getElementById('custSlicer').addEventListener('click',function(e){
+      var b=e.target.closest?e.target.closest('button'):null;
+      if(b)renderCustRank(b.getAttribute('data-m'));
+    });
+  })();
+  renderCustRank('全部');
+
+  /* ---------- 销售经理 ---------- */
+  var mgrs=D.managers;
+  var mth='<tr><th>销售经理</th><th>Q1出库(万)</th><th>Q2出库(万)</th><th>3-8月出库(万)</th><th>3-8月同期(万)</th><th>3-8月同比</th><th>任务达成</th></tr>';
+  var mtrs='';
+  var mTot={out:0,same:0,task:0,q1:0,q2:0};
+  mgrs.forEach(function(m){
+    mTot.out+=m.half.out;mTot.same+=m.half.same;mTot.task+=m.half.task;
+    mTot.q1+=m.q1.out;mTot.q2+=m.q2.out;
+    mtrs+='<tr><td>'+esc(m.name)+'</td><td>'+fw(m.q1.out)+'</td><td>'+fw(m.q2.out)+'</td><td>'+fw(m.half.out)+'</td><td>'+fw(m.half.same)+'</td><td>'+pct(m.half.yoy)+'</td><td>'+fw(m.half.achv)+'%</td></tr>';
+  });
+  mtrs+='<tr class="sum"><td>合计（仅导出2人）</td><td>'+fw(mTot.q1)+'</td><td>'+fw(mTot.q2)+'</td><td>'+fw(mTot.out)+'</td><td>'+fw(mTot.same)+'</td><td>'+pct((mTot.out-mTot.same)/mTot.same*100)+'</td><td>'+fw(mTot.out/mTot.task*100)+'%</td></tr>';
+  document.getElementById('mgrTbl').innerHTML=mth+mtrs;
+
+  /* 销售经理月度达成趋势（切片器） */
+  var mgrColor={'吴伟达':'#3370ff','龙碧霞':'#00b42a'};
+  var mgrNames=D.managerTrend.map(function(t){return t.name;});
+  function renderMgrTrend(sel){
+    var list=sel==='全部'?D.managerTrend:D.managerTrend.filter(function(t){return t.name===sel;});
+    var series=list.map(function(t){return {name:t.name,color:mgrColor[t.name],points:t.months.map(function(m){return m.achv;})};});
+    svgLines(document.getElementById('mgrTrendChart'),series,['3月','4月','5月','6月','7月','8月']);
+    var leg=list.map(function(t){return {c:mgrColor[t.name],label:t.name+' 月度任务达成率'};});
+    document.getElementById('mgrTrendLegend').innerHTML=legendHtml(leg);
+    var th='<tr><th>销售经理</th><th>3月</th><th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>8月</th></tr>';
+    var trs='';
+    list.forEach(function(t){
+      trs+='<tr><td style="color:'+mgrColor[t.name]+';font-weight:600">'+esc(t.name)+'</td>';
+      t.months.forEach(function(m){
+        trs+='<td>'+fw(m.out)+' 万<br><span class="'+(m.achv!=null&&m.achv>100?'up':'dim')+'">'+(m.achv==null?'—':fw(m.achv)+'%')+'</span></td>';
+      });
+      trs+='</tr>';
+    });
+    document.getElementById('mgrTrendTbl').innerHTML=th+trs;
+    var bs=document.getElementById('mgrSlicer').querySelectorAll('button');
+    bs.forEach(function(b){b.className=b.dataset.m===sel?'on':'';});
+  }
+  (function buildMgrSlicer(){
+    var h='<button class="on all" data-m="全部">两人对比</button>';
+    mgrNames.forEach(function(n){h+='<button data-m="'+esc(n)+'">'+esc(n)+'</button>';});
+    document.getElementById('mgrSlicer').innerHTML=h;
+    document.getElementById('mgrSlicer').addEventListener('click',function(e){
+      var b=e.target.closest?e.target.closest('button'):null;
+      if(b)renderMgrTrend(b.getAttribute('data-m'));
+    });
+  })();
+  renderMgrTrend('全部');
+
+  /* ---------- 口径说明 ---------- */
+  var nb='<ol style="padding-left:18px;font-size:13px;color:#4e5969;line-height:2">';
+  nb+='<li><b>范围</b>：桂北区域（经销商口径）+ 直营区域；期间 2026财年3月1日-8月31日（Q1=3-5月、Q2=6-8月）。</li>';
+  nb+='<li><b>金额口径</b>：业绩表“出库金额/同期销量”= 客户出库单“价税合计（折前）”，已与区域/直营汇总表核对一致（明细汇总 698.26 万 = 区域表累计）。渠道/客户/328 明细按同一折前口径现算。</li>';
+  nb+='<li><b>私域口径</b>：按客户名称映射“螺大叔、春日 → 私域”锁定（样表明细已为私域标签，映射保证口径不随原始标签漂移）；线上分销仅指丰豪、好吃吖等其余线上客户。</li>';
+  nb+='<li><b>直营同比</b>：3、4月为新增业务板块、无上年同期，页面标“新开”；5-8月可比。</li>';
+  nb+='<li><b>销售经理表</b>：导出仅含吴伟达、龙碧霞，与区域汇总表存在范围尾差，页面仅作参考。</li>';
+  nb+='<li><b>328</b>：328g 爆炒粉新品线（4月首销）；占比=当月328折前金额÷当月出库折前总额，保留两位小数（5月 0.52%、8月 1.43%）。</li>';
+  nb+='<li><b>来源</b>：'+esc(D.meta.source)+'；如需更新，替换“源数据”后运行 build_data.py，或联系维护方重新生成。</li>';
+  nb+='</ol>';
+  document.getElementById('noteBody').innerHTML=nb;
+})();
+</script>
+</body>
+</html>
