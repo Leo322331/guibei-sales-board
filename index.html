@@ -236,7 +236,7 @@ footer li::before{content:"·";position:absolute;left:0;color:var(--blue)}
 
   <section class="card" id="mgr">
     <h2>销售经理达成 <span class="tag">补充参考</span></h2>
-    <div class="desc">按“销售经理总业绩-品牌”表导出（吴伟达 / 龙碧霞）；含任务达成率与月度同比两张趋势图，均可按切片切换；与区域汇总表存在导出范围尾差，不作为主口径。</div>
+    <div class="desc">按“销售经理总业绩-品牌”表导出（吴伟达 / 龙碧霞）；区域汇总口径另含离职人员李航名下业绩（销售经理导出未含），故两者存在差额，本模块不作为主口径。</div>
     <div class="slicer" id="mgrSlicer"></div>
     <div class="legend" id="mgrTrendLegend"></div>
     <div class="chart-scroll"><div id="mgrTrendChart"></div></div>
@@ -2361,7 +2361,8 @@ window.BOARD_DATA = {
   mgrs.forEach(function(m){
     shareTxt+=m.name+' '+fw(m.half.out)+' 万 ≈ <b>'+fw(m.half.out/regionOut*100,1)+'%</b>；';
   });
-  shareTxt+='两人合计 '+fw(mTot.out)+' 万 ≈ <b>'+fw(mTot.out/regionOut*100,1)+'%</b>（与区域表的差额为导出范围尾差）。';
+  var lihang=Math.round((regionOut-mTot.out)*100)/100;
+  shareTxt+='两人合计 '+fw(mTot.out)+' 万 ≈ <b>'+fw(mTot.out/regionOut*100,1)+'%</b>；其余 <b>'+fw(lihang)+' 万 ≈ '+fw(lihang/regionOut*100,1)+'%</b> 为离职李航名下业绩（区域口径已含、销售经理表未含）。';
   document.getElementById('mgrShare').innerHTML=shareTxt;
 
   /* 销售经理月度达成趋势（切片器） */
@@ -2410,7 +2411,7 @@ window.BOARD_DATA = {
   nb+='<li><b>金额口径</b>：业绩表“出库金额/同期销量”= 客户出库单“价税合计（折前）”，已与区域/直营汇总表核对一致（明细汇总 698.26 万 = 区域表累计）。渠道/客户/328 明细按同一折前口径现算。</li>';
   nb+='<li><b>私域口径</b>：按客户名称映射“螺大叔、春日 → 私域”锁定（样表明细已为私域标签，映射保证口径不随原始标签漂移）；线上分销仅指丰豪、好吃吖等其余线上客户。</li>';
   nb+='<li><b>直营同比</b>：3、4月为新增业务板块、无上年同期，页面标“新开”；5-8月可比。</li>';
-  nb+='<li><b>销售经理表</b>：导出仅含吴伟达、龙碧霞，与区域汇总表存在范围尾差，页面仅作参考。</li>';
+  nb+='<li><b>销售经理表</b>：导出仅含在职的吴伟达、龙碧霞；离职人员李航名下业绩（3-8月约33.31万、占区域4.8%）含在区域口径、未进销售经理表，故两者存在差额，页面仅作参考。</li>';
   nb+='<li><b>328</b>：328g 爆炒粉新品线（4月首销）；占比=当月328折前金额÷当月出库折前总额，保留两位小数（5月 0.52%、8月 1.43%）。</li>';
   nb+='<li><b>来源</b>：'+esc(D.meta.source)+'；如需更新，替换“源数据”后运行 build_data.py，或联系维护方重新生成。</li>';
   nb+='</ol>';
