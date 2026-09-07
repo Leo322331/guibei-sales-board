@@ -242,6 +242,7 @@ footer li::before{content:"·";position:absolute;left:0;color:var(--blue)}
     <div class="chart-scroll"><div id="mgrTrendChart"></div></div>
     <div class="tbl-wrap"><table class="tbl" id="mgrTrendTbl"></table></div>
     <div class="tbl-wrap"><table class="tbl" id="mgrTbl"></table></div>
+    <div class="note" id="mgrShare"></div>
   </section>
 
   <section class="card" id="note">
@@ -2352,6 +2353,13 @@ window.BOARD_DATA = {
   });
   mtrs+='<tr class="sum"><td>合计（仅导出2人）</td><td>'+fw(mTot.q1)+'</td><td>'+fw(mTot.q2)+'</td><td>'+fw(mTot.out)+'</td><td>'+fw(mTot.same)+'</td><td>'+pct((mTot.out-mTot.same)/mTot.same*100)+'</td><td>'+fw(mTot.out/mTot.task*100)+'%</td></tr>';
   document.getElementById('mgrTbl').innerHTML=mth+mtrs;
+  var regionOut=gk.q1q2_out;
+  var shareTxt='区域占比（3-8月，销售经理表口径，区域总出库 '+fw(regionOut)+' 万）：';
+  mgrs.forEach(function(m){
+    shareTxt+=m.name+' '+fw(m.half.out)+' 万 ≈ <b>'+fw(m.half.out/regionOut*100,1)+'%</b>；';
+  });
+  shareTxt+='两人合计 '+fw(mTot.out)+' 万 ≈ <b>'+fw(mTot.out/regionOut*100,1)+'%</b>（与区域表的差额为导出范围尾差）。';
+  document.getElementById('mgrShare').innerHTML=shareTxt;
 
   /* 销售经理月度达成趋势（切片器） */
   var mgrColor={'吴伟达':'#3370ff','龙碧霞':'#00b42a'};
